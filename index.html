@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexora — The Curated Multi-Vendor Marketplace for Global Makers</title>
+  <meta name="description" content="Discover thousands of handcrafted artisan products, precision audio gear, designer fashion, and sustainable home decor from top-tier independent creators on Nexora.">
+  <meta name="keywords" content="multi-vendor marketplace, artisan goods, boutique creators, shop independent makers, global marketplace">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B35'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+
+  <!-- ========================================================================
+       Navigation Bar
+       ======================================================================== -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span>NEXORA</span>
+      </a>
+
+      <!-- Search Bar with Category Dropdown -->
+      <form class="nav-search" id="navSearchForm">
+        <select aria-label="Search category filter">
+          <option value="all">All Categories</option>
+          <option value="audio">Audio & Sound</option>
+          <option value="electronics">Electronics</option>
+          <option value="home">Home & Living</option>
+          <option value="fashion">Fashion</option>
+          <option value="beauty">Beauty</option>
+        </select>
+        <input type="text" placeholder="Search products, makers, or curated collections..." aria-label="Search products">
+        <button type="submit" class="search-btn" aria-label="Submit search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </form>
+
+      <!-- Desktop Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="categories.html" class="nav-link">Categories</a></li>
+          <li><a href="vendors.html" class="nav-link">Vendors</a></li>
+          <li><a href="auth.html?role=vendor" class="nav-link">Become a Seller</a></li>
+        </ul>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <a href="dashboard.html" class="action-btn" title="Merchant Dashboard" aria-label="Merchant Dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+
+        <a href="auth.html" class="action-btn" title="Sign In / Account" aria-label="Account Login">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+
+        <button class="action-btn" onclick="toggleCartDrawer()" title="Shopping Cart" aria-label="View Shopping Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count cart-badge-count" style="display: none;">0</span>
+        </button>
+
+        <button class="mobile-menu-toggle" id="mobileToggle" aria-label="Open navigation menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobileMenu" style="display:none; position: fixed; inset: 80px 0 0 0; background: rgba(9, 13, 22, 0.98); z-index: 99; padding: 2rem; flex-direction: column; gap: 1.5rem;">
+    <a href="index.html" style="font-size: 1.25rem; font-weight: 700; color: white;">Home</a>
+    <a href="categories.html" style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted);">Categories</a>
+    <a href="vendors.html" style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted);">Vendors</a>
+    <a href="dashboard.html" style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted);">Vendor Dashboard</a>
+    <a href="auth.html" class="btn-primary" style="text-align: center; margin-top: 1rem;">Sign In / Register</a>
+  </div>
+
+  <main>
+    <!-- ========================================================================
+         Section 1: Hero Section (Split Dynamic Layout, Layered Depth & Showcase)
+         H1: "Everything You Need in One Marketplace"
+         ======================================================================== -->
+    <section class="hero-section">
+      <div class="hero-backdrop-glow"></div>
+      <div class="container hero-grid">
+        <!-- Left Content -->
+        <div class="hero-text-col">
+          <div class="hero-badge-pill">
+            <span class="pulse-dot"></span>
+            <span>Over 850+ Verified Independent Merchants Worldwide</span>
+          </div>
+
+          <h1 class="hero-title">
+            Everything You Need in <span class="gradient-text">One Marketplace</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Immerse yourself in a curated collective of artisan creators, boutique ateliers, and audio engineers. Direct from the makers to your doorstep with guaranteed buyer protection.
+          </p>
+
+          <!-- Interactive Hero Search Bar -->
+          <div class="hero-search-container">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2.5" style="margin-left: 0.5rem;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" class="hero-search-input" id="heroSearchInput" placeholder="Try searching 'Titanium Watch', 'Studio ANC', 'Ceramics'..." aria-label="Search Nexora Marketplace">
+            <button class="btn-primary" onclick="window.location.href='categories.html?search=' + encodeURIComponent(document.getElementById('heroSearchInput').value)">
+              Find Deals
+            </button>
+          </div>
+
+          <!-- CTAs -->
+          <div class="hero-cta-group">
+            <a href="categories.html" class="btn-primary" style="padding: 0.9rem 2rem; font-size: 1.05rem;">
+              <span>Start Shopping</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+            <a href="auth.html?role=vendor" class="btn-secondary" style="padding: 0.9rem 1.8rem; font-size: 1.05rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              <span>Become a Seller</span>
+            </a>
+          </div>
+
+          <!-- Hero Metrics Bar -->
+          <div class="hero-stats-row">
+            <div class="hero-stat-box">
+              <h4>12,000+</h4>
+              <p>Unique Goods</p>
+            </div>
+            <div class="hero-stat-box">
+              <h4>850+</h4>
+              <p>Verified Shops</p>
+            </div>
+            <div class="hero-stat-box">
+              <h4>99.4%</h4>
+              <p>Positive Feedback</p>
+            </div>
+            <div class="hero-stat-box">
+              <h4>$0</h4>
+              <p>Listing Fees</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Visual Showcase with Floating 3D Layered Cards -->
+        <div class="hero-visual-col">
+          <div class="hero-main-card tilt-card" onclick="window.location.href='product-details.html?id=aurapulse-pro'">
+            <div class="hero-main-image">
+              <img src="images/hero_showcase.jpg" alt="Featured premium consumer tech on Nexora" width="600" height="400">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div>
+                <span style="font-size: 0.8rem; color: var(--trust-cyan); font-weight: 700; text-transform: uppercase;">Featured Spotlight</span>
+                <h3 style="font-size: 1.2rem; margin-top: 2px;">Chronos Sapphire Titanium</h3>
+              </div>
+              <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-primary); font-family: var(--font-heading);">$380.00</div>
+            </div>
+          </div>
+
+          <!-- Floating badge 1: Top Rating -->
+          <div class="hero-floating-pill pill-rating">
+            <div style="background: rgba(251, 191, 36, 0.15); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: #FBBF24;">
+              ★
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem; color: white;">4.9 / 5.0 Rating</div>
+              <div style="font-size: 0.75rem; color: var(--text-dim);">From 18,400+ Verified Buyers</div>
+            </div>
+          </div>
+
+          <!-- Floating badge 2: Verified Merchant -->
+          <div class="hero-floating-pill pill-vendor">
+            <div style="background: rgba(16, 185, 129, 0.2); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: var(--trust-emerald);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem; color: white;">Verified Merchant Escrow</div>
+              <div style="font-size: 0.75rem; color: var(--trust-emerald);">100% Funds Protection Guarantee</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Section 2: Browse Categories (3D Tilt, Center-Aligned)
+         ======================================================================== -->
+    <section class="section-wrapper">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Curated Collections</span>
+          <h2 class="section-title">Explore by Category</h2>
+          <p class="section-desc">Browse through handpicked departments curated for design enthusiasts, tech audiophiles, and sustainable living.</p>
+        </div>
+
+        <div class="categories-grid">
+          <!-- 1. Electronics -->
+          <a href="categories.html?cat=electronics" class="tilt-card category-card">
+            <div class="category-icon-box">
+              <img src="images/cat_electronics.jpg" alt="Electronics & Smart Tech department" loading="lazy">
+            </div>
+            <h3 class="category-title">Electronics & Tech</h3>
+            <p class="category-count">1,420+ Products</p>
+          </a>
+
+          <!-- 2. Home & Living -->
+          <a href="categories.html?cat=home" class="tilt-card category-card">
+            <div class="category-icon-box">
+              <img src="images/cat_home.jpg" alt="Home & Living Decor department" loading="lazy">
+            </div>
+            <h3 class="category-title">Home & Living</h3>
+            <p class="category-count">890+ Products</p>
+          </a>
+
+          <!-- 3. Fashion -->
+          <a href="categories.html?cat=fashion" class="tilt-card category-card">
+            <div class="category-icon-box">
+              <img src="images/cat_fashion.jpg" alt="Luxury Fashion & Apparel department" loading="lazy">
+            </div>
+            <h3 class="category-title">Fashion & Apparel</h3>
+            <p class="category-count">2,150+ Products</p>
+          </a>
+
+          <!-- 4. Beauty -->
+          <a href="categories.html?cat=beauty" class="tilt-card category-card">
+            <div class="category-icon-box">
+              <img src="images/cat_beauty.jpg" alt="Clean Beauty & Skincare department" loading="lazy">
+            </div>
+            <h3 class="category-title">Beauty & Wellness</h3>
+            <p class="category-count">640+ Products</p>
+          </a>
+
+          <!-- 5. Artisanal Crafts -->
+          <a href="categories.html?cat=crafts" class="tilt-card category-card">
+            <div class="category-icon-box">
+              <img src="images/cat_crafts.jpg" alt="Artisanal Crafts & Pottery department" loading="lazy">
+            </div>
+            <h3 class="category-title">Artisanal Crafts</h3>
+            <p class="category-count">1,120+ Products</p>
+          </a>
+
+          <!-- 6. Sports & Outdoors -->
+          <a href="categories.html?cat=sports" class="tilt-card category-card">
+            <div class="category-icon-box">
+              <img src="images/cat_sports.jpg" alt="Active Gear & Outdoor Equipment department" loading="lazy">
+            </div>
+            <h3 class="category-title">Sports & Outdoors</h3>
+            <p class="category-count">780+ Products</p>
+          </a>
+
+          <!-- 7. Gourmet Pantry -->
+          <a href="categories.html?cat=gourmet" class="tilt-card category-card">
+            <div class="category-icon-box">
+              <img src="images/cat_gourmet.jpg" alt="Gourmet Pantry & Artisan Coffee department" loading="lazy">
+            </div>
+            <h3 class="category-title">Gourmet & Coffee</h3>
+            <p class="category-count">430+ Products</p>
+          </a>
+
+          <!-- 8. Studio Audio -->
+          <a href="categories.html?cat=audio" class="tilt-card category-card">
+            <div class="category-icon-box">
+              <img src="images/cat_audio.jpg" alt="Studio & Audiophile Sound gear" loading="lazy">
+            </div>
+            <h3 class="category-title">Studio & Audio</h3>
+            <p class="category-count">560+ Products</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Section 3: Featured Vendors (Top/Featured Vendor Cards with 3D Tilt)
+         ======================================================================== -->
+    <section class="section-wrapper" style="background: rgba(16, 22, 38, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Verified Creators</span>
+          <h2 class="section-title">Featured Marketplace Vendors</h2>
+          <p class="section-desc">Meet our top-rated merchants recognized for exceptional product craft, ethical sourcing, and lightning-fast customer delivery.</p>
+        </div>
+
+        <div class="vendors-grid">
+          <!-- Vendor 1: Apex Audio Labs -->
+          <div class="tilt-card vendor-card featured" onclick="window.location.href='vendor-store.html?vendor=apex-audio'">
+            <div class="vendor-badge-featured">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>Premier</span>
+            </div>
+            <div class="vendor-cover-mini">
+              <img src="images/vendor_banner_1.jpg" alt="Apex Audio Labs studio storefront" loading="lazy">
+            </div>
+            <div class="vendor-avatar-wrap">
+              <img src="images/vendor_logo_1.jpg" alt="Apex Audio Labs merchant avatar" loading="lazy">
+            </div>
+            <h3 class="vendor-name">
+              <span>Apex Audio Labs</span>
+              <span class="verified-icon" title="Verified Merchant">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </span>
+            </h3>
+            <p class="vendor-tagline">Acoustic perfection engineered with aerospace-grade acoustics.</p>
+            <div class="vendor-metrics-row">
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">4.9 ★</span>
+                <span class="vendor-metric-lbl">Rating</span>
+              </div>
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">38</span>
+                <span class="vendor-metric-lbl">Products</span>
+              </div>
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">14.2k</span>
+                <span class="vendor-metric-lbl">Followers</span>
+              </div>
+            </div>
+            <a href="vendor-store.html?vendor=apex-audio" class="btn-primary" style="width: 100%; font-size: 0.85rem; padding: 0.65rem;">
+              Visit Storefront
+            </a>
+          </div>
+
+          <!-- Vendor 2: Lumina Living -->
+          <div class="tilt-card vendor-card" onclick="window.location.href='vendor-store.html?vendor=lumina-living'">
+            <div class="vendor-cover-mini">
+              <img src="images/vendor_banner_2.jpg" alt="Lumina Living Studio storefront" loading="lazy">
+            </div>
+            <div class="vendor-avatar-wrap">
+              <img src="images/vendor_logo_2.jpg" alt="Lumina Living merchant avatar" loading="lazy">
+            </div>
+            <h3 class="vendor-name">
+              <span>Lumina Living</span>
+              <span class="verified-icon" title="Verified Merchant">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </span>
+            </h3>
+            <p class="vendor-tagline">Nordic minimalism, sustainable oak furnishings, and sculptural lighting.</p>
+            <div class="vendor-metrics-row">
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">4.8 ★</span>
+                <span class="vendor-metric-lbl">Rating</span>
+              </div>
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">52</span>
+                <span class="vendor-metric-lbl">Products</span>
+              </div>
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">9.8k</span>
+                <span class="vendor-metric-lbl">Followers</span>
+              </div>
+            </div>
+            <a href="vendor-store.html?vendor=lumina-living" class="btn-primary" style="width: 100%; font-size: 0.85rem; padding: 0.65rem;">
+              Visit Storefront
+            </a>
+          </div>
+
+          <!-- Vendor 3: Velvet & Thread -->
+          <div class="tilt-card vendor-card featured" onclick="window.location.href='vendor-store.html?vendor=velvet-thread'">
+            <div class="vendor-badge-featured">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>Top Rated</span>
+            </div>
+            <div class="vendor-cover-mini">
+              <img src="images/vendor_banner_3.jpg" alt="Velvet and Thread atelier storefront" loading="lazy">
+            </div>
+            <div class="vendor-avatar-wrap">
+              <img src="images/vendor_logo_3.jpg" alt="Velvet and Thread merchant avatar" loading="lazy">
+            </div>
+            <h3 class="vendor-name">
+              <span>Velvet & Thread</span>
+              <span class="verified-icon" title="Verified Merchant">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </span>
+            </h3>
+            <p class="vendor-tagline">Modern luxury silhouettes hand-tailored from organic fabrics.</p>
+            <div class="vendor-metrics-row">
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">4.9 ★</span>
+                <span class="vendor-metric-lbl">Rating</span>
+              </div>
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">64</span>
+                <span class="vendor-metric-lbl">Products</span>
+              </div>
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">22.5k</span>
+                <span class="vendor-metric-lbl">Followers</span>
+              </div>
+            </div>
+            <a href="vendor-store.html?vendor=velvet-thread" class="btn-primary" style="width: 100%; font-size: 0.85rem; padding: 0.65rem;">
+              Visit Storefront
+            </a>
+          </div>
+
+          <!-- Vendor 4: Terra Clay & Crafts -->
+          <div class="tilt-card vendor-card" onclick="window.location.href='vendor-store.html?vendor=terra-artisans'">
+            <div class="vendor-cover-mini">
+              <img src="images/vendor_banner_4.jpg" alt="Terra Clay and Crafts artisan workshop" loading="lazy">
+            </div>
+            <div class="vendor-avatar-wrap">
+              <img src="images/vendor_logo_4.jpg" alt="Terra Clay and Crafts merchant avatar" loading="lazy">
+            </div>
+            <h3 class="vendor-name">
+              <span>Terra Clay & Crafts</span>
+              <span class="verified-icon" title="Verified Merchant">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </span>
+            </h3>
+            <p class="vendor-tagline">Wheel-thrown ceramic homewares and handcrafted pottery.</p>
+            <div class="vendor-metrics-row">
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">5.0 ★</span>
+                <span class="vendor-metric-lbl">Rating</span>
+              </div>
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">29</span>
+                <span class="vendor-metric-lbl">Products</span>
+              </div>
+              <div class="vendor-metric-item">
+                <span class="vendor-metric-val">8.1k</span>
+                <span class="vendor-metric-lbl">Followers</span>
+              </div>
+            </div>
+            <a href="vendor-store.html?vendor=terra-artisans" class="btn-primary" style="width: 100%; font-size: 0.85rem; padding: 0.65rem;">
+              Visit Storefront
+            </a>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="vendors.html" class="btn-secondary" style="padding: 0.8rem 2.2rem;">
+            <span>Browse All 850+ Marketplace Vendors</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Section 4: Trending Products (8 Products Grid, 3D Tilt, Instant Cart Add)
+         ======================================================================== -->
+    <section class="section-wrapper">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Hot & In-Demand</span>
+          <h2 class="section-title">Trending Marketplace Finds</h2>
+          <p class="section-desc">Highest velocity items backed by 5-star customer reviews and verified vendor stock guarantees.</p>
+        </div>
+
+        <div class="products-grid">
+          <!-- 1. Headphones -->
+          <div class="tilt-card product-card">
+            <div class="product-thumb-wrap">
+              <span class="discount-badge">22% OFF</span>
+              <button class="wishlist-toggle" onclick="toggleWishlist('aurapulse-pro', this)" aria-label="Add to wishlist">♥</button>
+              <a href="product-details.html?id=aurapulse-pro" style="width: 100%; height: 100%;">
+                <img src="images/prod_headphones.jpg" alt="AuraPulse ANC Wireless Studio Headphones" loading="lazy">
+              </a>
+            </div>
+            <a href="vendor-store.html?vendor=apex-audio" class="product-vendor-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Apex Audio Labs</span>
+            </a>
+            <h3 class="product-title">
+              <a href="product-details.html?id=aurapulse-pro">AuraPulse ANC Wireless Studio Headphones</a>
+            </h3>
+            <div class="product-rating">
+              <span>★★★★★</span>
+              <span style="color: var(--text-dim); font-size: 0.8rem;">(428)</span>
+            </div>
+            <div class="product-pricing">
+              <span class="current-price">$249.00</span>
+              <span class="original-price">$320.00</span>
+            </div>
+            <button class="add-cart-btn" onclick="addToCart('aurapulse-pro', 1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          <!-- 2. Watch -->
+          <div class="tilt-card product-card">
+            <div class="product-thumb-wrap">
+              <span class="discount-badge">15% OFF</span>
+              <button class="wishlist-toggle" onclick="toggleWishlist('chronos-sapphire', this)" aria-label="Add to wishlist">♥</button>
+              <a href="product-details.html?id=chronos-sapphire" style="width: 100%; height: 100%;">
+                <img src="images/prod_watch.jpg" alt="Chronos Minimalist Sapphire Titanium Watch" loading="lazy">
+              </a>
+            </div>
+            <a href="vendor-store.html?vendor=apex-audio" class="product-vendor-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Apex Audio Labs</span>
+            </a>
+            <h3 class="product-title">
+              <a href="product-details.html?id=chronos-sapphire">Chronos Minimalist Sapphire Titanium Watch</a>
+            </h3>
+            <div class="product-rating">
+              <span>★★★★★</span>
+              <span style="color: var(--text-dim); font-size: 0.8rem;">(194)</span>
+            </div>
+            <div class="product-pricing">
+              <span class="current-price">$380.00</span>
+              <span class="original-price">$450.00</span>
+            </div>
+            <button class="add-cart-btn" onclick="addToCart('chronos-sapphire', 1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          <!-- 3. Leather Bag -->
+          <div class="tilt-card product-card">
+            <div class="product-thumb-wrap">
+              <span class="discount-badge">16% OFF</span>
+              <button class="wishlist-toggle" onclick="toggleWishlist('vagabond-duffle', this)" aria-label="Add to wishlist">♥</button>
+              <a href="product-details.html?id=vagabond-duffle" style="width: 100%; height: 100%;">
+                <img src="images/prod_bag.jpg" alt="Vagabond Full-Grain Artisan Leather Duffle" loading="lazy">
+              </a>
+            </div>
+            <a href="vendor-store.html?vendor=velvet-thread" class="product-vendor-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Velvet & Thread</span>
+            </a>
+            <h3 class="product-title">
+              <a href="product-details.html?id=vagabond-duffle">Vagabond Full-Grain Artisan Leather Duffle</a>
+            </h3>
+            <div class="product-rating">
+              <span>★★★★★</span>
+              <span style="color: var(--text-dim); font-size: 0.8rem;">(312)</span>
+            </div>
+            <div class="product-pricing">
+              <span class="current-price">$285.00</span>
+              <span class="original-price">$340.00</span>
+            </div>
+            <button class="add-cart-btn" onclick="addToCart('vagabond-duffle', 1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          <!-- 4. Camera -->
+          <div class="tilt-card product-card">
+            <div class="product-thumb-wrap">
+              <span class="discount-badge">10% OFF</span>
+              <button class="wishlist-toggle" onclick="toggleWishlist('lumix-rangefinder', this)" aria-label="Add to wishlist">♥</button>
+              <a href="product-details.html?id=lumix-rangefinder" style="width: 100%; height: 100%;">
+                <img src="images/prod_camera.jpg" alt="Heritage Classic 35mm Digital Rangefinder Camera" loading="lazy">
+              </a>
+            </div>
+            <a href="vendor-store.html?vendor=apex-audio" class="product-vendor-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Apex Audio Labs</span>
+            </a>
+            <h3 class="product-title">
+              <a href="product-details.html?id=lumix-rangefinder">Heritage Classic 35mm Digital Rangefinder</a>
+            </h3>
+            <div class="product-rating">
+              <span>★★★★★</span>
+              <span style="color: var(--text-dim); font-size: 0.8rem;">(88)</span>
+            </div>
+            <div class="product-pricing">
+              <span class="current-price">$890.00</span>
+              <span class="original-price">$990.00</span>
+            </div>
+            <button class="add-cart-btn" onclick="addToCart('lumix-rangefinder', 1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          <!-- 5. Sculptural Desk Lamp -->
+          <div class="tilt-card product-card">
+            <div class="product-thumb-wrap">
+              <span class="discount-badge">15% OFF</span>
+              <button class="wishlist-toggle" onclick="toggleWishlist('eclipse-lamp', this)" aria-label="Add to wishlist">♥</button>
+              <a href="product-details.html?id=eclipse-lamp" style="width: 100%; height: 100%;">
+                <img src="images/prod_lamp.jpg" alt="Eclipse Sculptural Dimmable Ambient Desk Lamp" loading="lazy">
+              </a>
+            </div>
+            <a href="vendor-store.html?vendor=lumina-living" class="product-vendor-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Lumina Living</span>
+            </a>
+            <h3 class="product-title">
+              <a href="product-details.html?id=eclipse-lamp">Eclipse Sculptural Dimmable Ambient Desk Lamp</a>
+            </h3>
+            <div class="product-rating">
+              <span>★★★★★</span>
+              <span style="color: var(--text-dim); font-size: 0.8rem;">(142)</span>
+            </div>
+            <div class="product-pricing">
+              <span class="current-price">$165.00</span>
+              <span class="original-price">$195.00</span>
+            </div>
+            <button class="add-cart-btn" onclick="addToCart('eclipse-lamp', 1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          <!-- 6. Lounge Chair -->
+          <div class="tilt-card product-card">
+            <div class="product-thumb-wrap">
+              <span class="discount-badge">14% OFF</span>
+              <button class="wishlist-toggle" onclick="toggleWishlist('komorebi-chair', this)" aria-label="Add to wishlist">♥</button>
+              <a href="product-details.html?id=komorebi-chair" style="width: 100%; height: 100%;">
+                <img src="images/prod_chair.jpg" alt="Komorebi Mid-Century Ergonomic Walnut Lounge Chair" loading="lazy">
+              </a>
+            </div>
+            <a href="vendor-store.html?vendor=lumina-living" class="product-vendor-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Lumina Living</span>
+            </a>
+            <h3 class="product-title">
+              <a href="product-details.html?id=komorebi-chair">Komorebi Ergonomic Walnut Lounge Chair</a>
+            </h3>
+            <div class="product-rating">
+              <span>★★★★★</span>
+              <span style="color: var(--text-dim); font-size: 0.8rem;">(97)</span>
+            </div>
+            <div class="product-pricing">
+              <span class="current-price">$640.00</span>
+              <span class="original-price">$750.00</span>
+            </div>
+            <button class="add-cart-btn" onclick="addToCart('komorebi-chair', 1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          <!-- 7. Sneakers -->
+          <div class="tilt-card product-card">
+            <div class="product-thumb-wrap">
+              <span class="discount-badge">14% OFF</span>
+              <button class="wishlist-toggle" onclick="toggleWishlist('aerolite-sneakers', this)" aria-label="Add to wishlist">♥</button>
+              <a href="product-details.html?id=aerolite-sneakers" style="width: 100%; height: 100%;">
+                <img src="images/prod_sneakers.jpg" alt="Aerolite PrimeKnit Performance Running Sneakers" loading="lazy">
+              </a>
+            </div>
+            <a href="vendor-store.html?vendor=velvet-thread" class="product-vendor-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Velvet & Thread</span>
+            </a>
+            <h3 class="product-title">
+              <a href="product-details.html?id=aerolite-sneakers">Aerolite PrimeKnit Performance Sneakers</a>
+            </h3>
+            <div class="product-rating">
+              <span>★★★★★</span>
+              <span style="color: var(--text-dim); font-size: 0.8rem;">(520)</span>
+            </div>
+            <div class="product-pricing">
+              <span class="current-price">$155.00</span>
+              <span class="original-price">$180.00</span>
+            </div>
+            <button class="add-cart-btn" onclick="addToCart('aerolite-sneakers', 1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          <!-- 8. Skincare Serum -->
+          <div class="tilt-card product-card">
+            <div class="product-thumb-wrap">
+              <span class="discount-badge">20% OFF</span>
+              <button class="wishlist-toggle" onclick="toggleWishlist('radiance-elixir', this)" aria-label="Add to wishlist">♥</button>
+              <a href="product-details.html?id=radiance-elixir" style="width: 100%; height: 100%;">
+                <img src="images/prod_skincare.jpg" alt="Botanical Radiance Restorative Facial Elixir" loading="lazy">
+              </a>
+            </div>
+            <a href="vendor-store.html?vendor=terra-artisans" class="product-vendor-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Terra Clay & Crafts</span>
+            </a>
+            <h3 class="product-title">
+              <a href="product-details.html?id=radiance-elixir">Botanical Radiance Restorative Facial Elixir</a>
+            </h3>
+            <div class="product-rating">
+              <span>★★★★★</span>
+              <span style="color: var(--text-dim); font-size: 0.8rem;">(380)</span>
+            </div>
+            <div class="product-pricing">
+              <span class="current-price">$68.00</span>
+              <span class="original-price">$85.00</span>
+            </div>
+            <button class="add-cart-btn" onclick="addToCart('radiance-elixir', 1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="categories.html" class="btn-primary" style="padding: 0.85rem 2.2rem;">
+            <span>Explore All 12 Products & Catalog</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Section 5: Become a Seller CTA (Bold, High-Contrast Commerce Action)
+         ======================================================================== -->
+    <section class="seller-cta-section">
+      <div class="container">
+        <div class="seller-cta-card">
+          <div>
+            <span style="display: inline-block; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--accent-primary); letter-spacing: 1.5px; margin-bottom: 0.75rem;">
+              Merchant Partnership
+            </span>
+            <h2 style="font-size: 2.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;">
+              Turn Your Craft Into a <span style="background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Global Brand</span>
+            </h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6;">
+              Join more than 850 independent makers reaching passionate buyers across 65+ countries. Enjoy lowest-in-class fees, automated shipping tools, and direct payout options.
+            </p>
+
+            <div class="seller-perks-list">
+              <div class="perk-item">
+                <div class="perk-icon">✓</div>
+                <div>
+                  <strong style="color: white; font-size: 0.95rem;">Reach Thousands of Buyers</strong>
+                  <div style="font-size: 0.8rem; color: var(--text-dim);">Instant visibility across all curated collections</div>
+                </div>
+              </div>
+              <div class="perk-item">
+                <div class="perk-icon">✓</div>
+                <div>
+                  <strong style="color: white; font-size: 0.95rem;">Zero Setup Hassle</strong>
+                  <div style="font-size: 0.8rem; color: var(--text-dim);">Launch your storefront in less than 5 minutes</div>
+                </div>
+              </div>
+              <div class="perk-item">
+                <div class="perk-icon">✓</div>
+                <div>
+                  <strong style="color: white; font-size: 0.95rem;">Instant Daily Payouts</strong>
+                  <div style="font-size: 0.8rem; color: var(--text-dim);">Direct automated bank transfers in your local currency</div>
+                </div>
+              </div>
+              <div class="perk-item">
+                <div class="perk-icon">✓</div>
+                <div>
+                  <strong style="color: white; font-size: 0.95rem;">Only 3% Flat Commission</strong>
+                  <div style="font-size: 0.8rem; color: var(--text-dim);">Keep 97% of everything you earn with no hidden cuts</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; background: rgba(9, 13, 22, 0.6); padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent-gradient); display: grid; place-items: center; box-shadow: var(--shadow-accent);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            </div>
+            <h3 style="font-size: 1.35rem; color: white;">Start Selling on Nexora</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">No credit card required. Free tier forever.</p>
+            <a href="auth.html?role=vendor" class="btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem;">
+              Open Your Storefront Today
+            </a>
+            <span style="font-size: 0.75rem; color: var(--trust-emerald);">● 42 new sellers joined this week</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       Global Cart Drawer & Backdrop
+       ======================================================================== -->
+  <div class="cart-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Cart Drawer">
+    <div class="cart-header">
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: white;">Your Shopping Cart</h3>
+      </div>
+      <button class="cart-close-btn" onclick="toggleCartDrawer()" aria-label="Close cart">✕</button>
+    </div>
+
+    <!-- Items List -->
+    <div class="cart-items-list" id="cartItemsList">
+      <!-- Populated via store.js -->
+    </div>
+
+    <!-- Footer Total & Checkout -->
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Cart Subtotal</span>
+        <span id="cartSubtotal">$0.00</span>
+      </div>
+      <div class="cart-total-row">
+        <span>Standard Insured Shipping</span>
+        <span style="color: var(--trust-emerald);">Calculated at step</span>
+      </div>
+      <div class="cart-total-row grand-total">
+        <span>Estimated Total</span>
+        <span id="cartGrandTotal" style="color: var(--accent-primary);">$0.00</span>
+      </div>
+      <button class="btn-primary" style="width: 100%; padding: 0.95rem; font-size: 1.05rem;" onclick="showToast('Checkout Initialized', 'Simulating safe SSL encrypted multi-vendor checkout...', 'success')">
+        Proceed to Secure Checkout
+      </button>
+      <div style="text-align: center; margin-top: 0.75rem; font-size: 0.75rem; color: var(--text-dim);">
+        🔒 256-Bit Bank Grade SSL Encrypted Checkout
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================================
+       Global Footer
+       ======================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo" style="margin-bottom: 1rem;">
+            <div class="brand-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span>NEXORA</span>
+          </div>
+          <p>The global multi-vendor commerce engine connecting independent master craftsmen, designers, and innovators directly with design-conscious patrons.</p>
+          <div style="color: var(--trust-cyan); font-size: 0.85rem; font-weight: 600;">
+            ✓ Over $42M paid out to independent creators
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Marketplace</h4>
+          <ul class="footer-links">
+            <li><a href="categories.html">All Categories</a></li>
+            <li><a href="categories.html?sort=trending">Trending Goods</a></li>
+            <li><a href="vendors.html">Vendor Directory</a></li>
+            <li><a href="categories.html?deals=true">Spotlight Offers</a></li>
+            <li><a href="categories.html?cat=audio">Audiophile Studio</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">For Sellers</h4>
+          <ul class="footer-links">
+            <li><a href="auth.html?role=vendor">Open a Storefront</a></li>
+            <li><a href="dashboard.html">Seller Dashboard</a></li>
+            <li><a href="dashboard.html">Inventory Manager</a></li>
+            <li><a href="dashboard.html">Payout Schedule</a></li>
+            <li><a href="auth.html?role=vendor">Merchant Protection Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Trust & Support</h4>
+          <ul class="footer-links">
+            <li><a href="#">Help Center & FAQs</a></li>
+            <li><a href="#">Buyer Protection Escrow</a></li>
+            <li><a href="#">30-Day Return Guarantee</a></li>
+            <li><a href="#">Shipping Timelines</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Nexora Marketplace Inc. All rights reserved. Designed for independent commerce.</div>
+        <div style="display: flex; gap: 1.5rem;">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Sale</a>
+          <a href="sitemap.xml">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/tilt.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    // Mobile menu toggle
+    const toggleBtn = document.getElementById('mobileToggle');
+    const menuEl = document.getElementById('mobileMenu');
+    toggleBtn?.addEventListener('click', () => {
+      menuEl.style.display = menuEl.style.display === 'none' ? 'flex' : 'none';
+    });
+  </script>
+</body>
+</html>

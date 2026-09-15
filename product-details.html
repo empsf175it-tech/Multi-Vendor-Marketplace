@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraPulse ANC Wireless Studio Headphones — Nexora Marketplace</title>
+  <meta name="description" content="Buy AuraPulse ANC Wireless Studio Headphones directly from Apex Audio Labs on Nexora. 45mm beryllium drivers, 42dB active noise cancellation, and 40h battery life.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B35'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+  <style>
+    .product-details-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3.5rem;
+      margin-top: 2rem;
+      margin-bottom: 4rem;
+    }
+    .gallery-container {
+      position: sticky;
+      top: 100px;
+    }
+    .main-image-viewport {
+      width: 100%;
+      height: 480px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow-lg);
+    }
+    .main-image-viewport img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .main-image-viewport:hover img {
+      transform: scale(1.05);
+    }
+    .gallery-thumbnails-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+    .thumb-item {
+      width: 90px;
+      height: 90px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-subtle);
+      background: var(--bg-card);
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all var(--transition-fast);
+    }
+    .thumb-item:hover, .thumb-item.active {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .swatch-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .color-swatch {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      position: relative;
+      transition: all var(--transition-fast);
+    }
+    .color-swatch.active {
+      border-color: white;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+      transform: scale(1.1);
+    }
+    .qty-selector {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 0.35rem 0.6rem;
+      width: fit-content;
+    }
+    .qty-input-btn {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .qty-number {
+      width: 36px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+    }
+    .mini-vendor-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: 2rem;
+      box-shadow: var(--shadow-card);
+    }
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 300;
+      display: none;
+      place-items: center;
+      padding: 2rem;
+    }
+    .lightbox-modal img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+    }
+    @media (max-width: 960px) {
+      .product-details-grid {
+        grid-template-columns: 1fr;
+      }
+      .gallery-container {
+        position: static;
+      }
+      .main-image-viewport {
+        height: 380px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span>NEXORA</span>
+      </a>
+
+      <!-- Search Bar -->
+      <form class="nav-search" id="navSearchForm">
+        <select aria-label="Search category filter">
+          <option value="all">All Categories</option>
+          <option value="audio">Audio & Sound</option>
+          <option value="electronics">Electronics</option>
+          <option value="home">Home & Living</option>
+        </select>
+        <input type="text" placeholder="Search catalog..." aria-label="Search catalog">
+        <button type="submit" class="search-btn" aria-label="Submit search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </form>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="categories.html" class="nav-link">Categories</a></li>
+          <li><a href="vendors.html" class="nav-link">Vendors</a></li>
+          <li><a href="auth.html?role=vendor" class="nav-link">Become a Seller</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="action-btn" title="Merchant Dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="auth.html" class="action-btn" title="Sign In / Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+        <button class="action-btn" onclick="toggleCartDrawer()" title="Shopping Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count cart-badge-count" style="display: none;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+    <!-- Breadcrumb Navigation -->
+    <div style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1.5rem;">
+      <a href="index.html" style="color: var(--text-muted);">Home</a> / 
+      <a href="categories.html" style="color: var(--text-muted);">Catalog</a> / 
+      <a href="categories.html?cat=audio" id="breadcrumbCategory" style="color: var(--text-muted);">Audio & Sound</a> / 
+      <span id="breadcrumbTitle" style="color: var(--accent-primary);">AuraPulse ANC Wireless Studio Headphones</span>
+    </div>
+
+    <!-- Product Layout Grid -->
+    <div class="product-details-grid">
+      <!-- Left Column: Multi-Angle Interactive Gallery -->
+      <div class="gallery-container">
+        <div class="main-image-viewport" id="mainImageViewport" onclick="openLightbox()">
+          <img id="mainImageDisplay" src="images/prod_headphones.jpg" alt="AuraPulse ANC Wireless Studio Headphones main view">
+          <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(9, 13, 22, 0.7); backdrop-filter: blur(8px); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.35rem;">
+            <span>🔍 Click to expand</span>
+          </div>
+        </div>
+
+        <!-- 4 Distinct Alternate Angle Thumbnails -->
+        <div class="gallery-thumbnails-row" id="galleryThumbnails">
+          <div class="thumb-item active" onclick="switchGalleryImage('images/prod_headphones.jpg', this)">
+            <img src="images/prod_headphones.jpg" alt="Headphones frontal angle">
+          </div>
+          <div class="thumb-item" onclick="switchGalleryImage('images/gallery_1.jpg', this)">
+            <img src="images/gallery_1.jpg" alt="Headphones mounted on modern aluminum audio stand">
+          </div>
+          <div class="thumb-item" onclick="switchGalleryImage('images/gallery_2.jpg', this)">
+            <img src="images/gallery_2.jpg" alt="Close up of earcups, acoustic memory foam and metal hinges">
+          </div>
+          <div class="thumb-item" onclick="switchGalleryImage('images/gallery_3.jpg', this)">
+            <img src="images/gallery_3.jpg" alt="Headphones folded in hard-shell matte protective travel case">
+          </div>
+          <div class="thumb-item" onclick="switchGalleryImage('images/gallery_4.jpg', this)">
+            <img src="images/gallery_4.jpg" alt="Lifestyle model listening to headphones in architectural studio">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Product Specs, Variants, Cart & Mini Vendor Card -->
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+          <span class="discount-badge" id="productDiscountBadge" style="position: static;">22% OFF</span>
+          <span style="background: rgba(16, 185, 129, 0.15); color: var(--trust-emerald); font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: var(--radius-full);">
+            ● In Stock (<span id="stockCountDisplay">14</span> available)
+          </span>
+          <span style="color: var(--trust-cyan); font-size: 0.85rem; font-weight: 600;">Fast 2-Day Air Shipping</span>
+        </div>
+
+        <h1 id="productTitle" style="font-size: 2.2rem; font-weight: 800; line-height: 1.25; margin-bottom: 0.75rem;">
+          AuraPulse ANC Wireless Studio Headphones
+        </h1>
+
+        <!-- Rating Row -->
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <div style="color: #FBBF24; font-size: 1rem;">★★★★★</div>
+          <span style="font-weight: 700; color: white;" id="ratingScore">4.9</span>
+          <span style="color: var(--text-dim); font-size: 0.9rem;">(<span id="reviewsCountScore">428</span> verified customer reviews)</span>
+        </div>
+
+        <!-- Pricing Row -->
+        <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle);">
+          <span class="current-price" id="currentPriceDisplay" style="font-size: 2.2rem;">$249.00</span>
+          <span class="original-price" id="originalPriceDisplay" style="font-size: 1.1rem;">$320.00</span>
+          <span style="font-size: 0.85rem; color: var(--trust-emerald); font-weight: 600;">Save $71.00</span>
+        </div>
+
+        <!-- Product Description -->
+        <p id="productDescription" style="color: var(--text-muted); font-size: 1rem; line-height: 1.65; margin-bottom: 2rem;">
+          Experience pure sonic fidelity. Custom-engineered 45mm beryllium drivers deliver ultra-low distortion, deep visceral bass, and expansive soundstage. Featuring hybrid 42dB active noise cancellation with spatial audio tracking and 40-hour continuous battery life.
+        </p>
+
+        <!-- Variant Options: Color Selection -->
+        <div style="margin-bottom: 1.5rem;">
+          <div style="font-size: 0.9rem; font-weight: 700; color: white; margin-bottom: 0.5rem;">
+            Color Finish: <span id="selectedColorLabel" style="color: var(--accent-primary); font-weight: 600;">Obsidian Matte Black</span>
+          </div>
+          <div class="swatch-group">
+            <div class="color-swatch active" style="background: #11141E;" onclick="selectColor('Obsidian Matte Black', this)"></div>
+            <div class="color-swatch" style="background: #A0AEC0;" onclick="selectColor('Brushed Titanium Silver', this)"></div>
+            <div class="color-swatch" style="background: #FF6B35;" onclick="selectColor('Solar Amber Edition', this)"></div>
+          </div>
+        </div>
+
+        <!-- Quantity & Purchase Action Buttons -->
+        <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2rem; flex-wrap: wrap;">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.35rem; font-weight: 600;">QUANTITY</div>
+            <div class="qty-selector">
+              <button class="qty-input-btn" onclick="updateDetailQty(-1)">−</button>
+              <div class="qty-number" id="detailQtyVal">1</div>
+              <button class="qty-input-btn" onclick="updateDetailQty(1)">+</button>
+            </div>
+          </div>
+
+          <div style="flex: 1; min-width: 200px; display: flex; gap: 0.75rem; margin-top: 1.2rem;">
+            <button class="btn-primary" style="flex: 1; padding: 0.9rem;" onclick="handleAddCurrentToCart()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span>Add to Cart</span>
+            </button>
+            <button class="btn-secondary" style="padding: 0.9rem 1.4rem;" onclick="handleBuyNow()">
+              Buy Now
+            </button>
+            <button class="action-btn" style="height: 48px; width: 48px;" onclick="toggleWishlist('aurapulse-pro', this)" title="Add to Wishlist">
+              ♥
+            </button>
+          </div>
+        </div>
+
+        <!-- Mini Vendor Card (Required: Logo, Name, Rating, Visit Store link) -->
+        <div class="tilt-card mini-vendor-card">
+          <div style="display: flex; align-items: center; gap: 1rem; width: 100%; justify-content: center; margin-bottom: 0.75rem;">
+            <div style="width: 54px; height: 54px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent-primary); background: #0F172A; flex-shrink: 0;">
+              <img id="miniVendorLogo" src="images/vendor_logo_1.jpg" alt="Apex Audio Labs avatar">
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                <h4 id="miniVendorName" style="font-size: 1.15rem; color: white;">Apex Audio Labs</h4>
+                <span style="color: var(--trust-emerald);">✓</span>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-dim);">Verified Maker Collective • Stockholm, Sweden</div>
+            </div>
+          </div>
+          <p id="miniVendorTagline" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Acoustic perfection engineered with aerospace-grade acoustics.
+          </p>
+          <a id="miniVendorStoreLink" href="vendor-store.html?vendor=apex-audio" class="btn-secondary" style="width: 100%; font-size: 0.85rem; padding: 0.6rem;">
+            Visit Seller's Storefront
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Details Tabs (Specs, Shipping, Reviews) -->
+    <div style="margin-top: 4rem;">
+      <div class="store-tabs-nav">
+        <button class="store-tab-btn active" onclick="switchProductTab('specs', this)">Technical Specifications</button>
+        <button class="store-tab-btn" onclick="switchProductTab('shipping', this)">Shipping & Escrow Guarantee</button>
+        <button class="store-tab-btn" onclick="switchProductTab('reviews', this)">Customer Reviews (428)</button>
+      </div>
+
+      <!-- Tab: Specs -->
+      <div class="tab-pane active" id="ptab-specs">
+        <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem;">
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+              <span style="color: var(--text-dim); font-size: 0.85rem;">Driver Diameter</span>
+              <div style="font-weight: 600; color: white;">45mm Beryllium Acoustic Transducer</div>
+            </div>
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+              <span style="color: var(--text-dim); font-size: 0.85rem;">Active Noise Cancellation</span>
+              <div style="font-weight: 600; color: white;">Hybrid 42dB Quad-Microphone System</div>
+            </div>
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+              <span style="color: var(--text-dim); font-size: 0.85rem;">Battery Life</span>
+              <div style="font-weight: 600; color: white;">40 Hours ANC On / 55 Hours ANC Off</div>
+            </div>
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+              <span style="color: var(--text-dim); font-size: 0.85rem;">Wireless Connectivity</span>
+              <div style="font-weight: 600; color: white;">Bluetooth 5.3 + LDAC & aptX Lossless</div>
+            </div>
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+              <span style="color: var(--text-dim); font-size: 0.85rem;">Weight</span>
+              <div style="font-weight: 600; color: white;">248 grams (Ultralight ergonomic memory foam)</div>
+            </div>
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+              <span style="color: var(--text-dim); font-size: 0.85rem;">Included in Box</span>
+              <div style="font-weight: 600; color: white;">Hard Travel Case, 3.5mm Braided Cable, USB-C Cable</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Shipping -->
+      <div class="tab-pane" id="ptab-shipping">
+        <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem;">
+          <h3 style="font-size: 1.2rem; color: white; margin-bottom: 1rem;">Nexora Buyer Protection & Delivery</h3>
+          <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem;">
+            Your funds are held securely in the Nexora Merchant Escrow Vault until you receive your order and confirm its condition. Sellers only receive payout once delivery confirmation is registered.
+          </p>
+          <ul style="color: var(--text-muted); padding-left: 1.25rem; line-height: 1.8; font-size: 0.95rem;">
+            <li>Prepaid return labels provided for 30 days.</li>
+            <li>Carbon-neutral certified shipping in recyclable protective packaging.</li>
+            <li>Free insured courier delivery worldwide on orders exceeding $150.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tab: Reviews -->
+      <div class="tab-pane" id="ptab-reviews">
+        <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem;">
+          <h3 style="font-size: 1.2rem; color: white; margin-bottom: 1.5rem;">Verified Customer Ratings</h3>
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between;">
+                <strong>Henrik N. — Verified Buyer</strong>
+                <span style="color: #FBBF24;">★★★★★</span>
+              </div>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.35rem;">
+                "The noise cancellation blocks out jet engine hum entirely, and the acoustic clarity is on par with $800 wired studio monitors. Truly mastercraft."
+              </p>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between;">
+                <strong>Sarah K. — Verified Buyer</strong>
+                <span style="color: #FBBF24;">★★★★★</span>
+              </div>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.35rem;">
+                "Shipped from Stockholm to London in 36 hours. Beautiful craftsmanship and comfortable for 8+ hour work sessions."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    <div style="margin-top: 5rem;">
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: 1.5rem;">
+        More From This Merchant & Category
+      </h2>
+      <div class="products-grid" id="relatedProductsGrid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
+    <img id="lightboxImg" src="images/prod_headphones.jpg" alt="Zoomed view">
+  </div>
+
+  <!-- Global Cart Drawer & Backdrop -->
+  <div class="cart-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Cart Drawer">
+    <div class="cart-header">
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: white;">Your Shopping Cart</h3>
+      </div>
+      <button class="cart-close-btn" onclick="toggleCartDrawer()" aria-label="Close cart">✕</button>
+    </div>
+    <div class="cart-items-list" id="cartItemsList"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Cart Subtotal</span>
+        <span id="cartSubtotal">$0.00</span>
+      </div>
+      <div class="cart-total-row grand-total">
+        <span>Estimated Total</span>
+        <span id="cartGrandTotal" style="color: var(--accent-primary);">$0.00</span>
+      </div>
+      <button class="btn-primary" style="width: 100%; padding: 0.95rem;" onclick="showToast('Checkout Initialized', 'Connecting to secure escrow checkout...', 'success')">
+        Proceed to Secure Checkout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo" style="margin-bottom: 1rem;">
+            <div class="brand-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span>NEXORA</span>
+          </div>
+          <p>The global multi-vendor commerce engine connecting independent master craftsmen, designers, and innovators directly with design-conscious patrons.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Marketplace</h4>
+          <ul class="footer-links">
+            <li><a href="categories.html">All Categories</a></li>
+            <li><a href="vendors.html">Vendor Directory</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">For Sellers</h4>
+          <ul class="footer-links">
+            <li><a href="auth.html?role=vendor">Open a Storefront</a></li>
+            <li><a href="dashboard.html">Seller Dashboard</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Trust & Security</h4>
+          <ul class="footer-links">
+            <li><a href="#">Escrow Guarantee</a></li>
+            <li><a href="#">Terms & Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 Nexora Marketplace Inc. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/tilt.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    let currentProduct = null;
+    let selectedColor = 'Obsidian Matte Black';
+    let detailQty = 1;
+
+    function switchGalleryImage(src, thumbEl) {
+      document.getElementById('mainImageDisplay').src = src;
+      document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
+      thumbEl.classList.add('active');
+    }
+
+    function openLightbox() {
+      const src = document.getElementById('mainImageDisplay').src;
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxModal').style.display = 'grid';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightboxModal').style.display = 'none';
+    }
+
+    function selectColor(colorName, swatchEl) {
+      selectedColor = colorName;
+      document.getElementById('selectedColorLabel').textContent = colorName;
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+      swatchEl.classList.add('active');
+    }
+
+    function updateDetailQty(delta) {
+      detailQty = Math.max(1, detailQty + delta);
+      document.getElementById('detailQtyVal').textContent = detailQty;
+    }
+
+    function handleAddCurrentToCart() {
+      if (!currentProduct) return;
+      addToCart(currentProduct.id, detailQty, { color: selectedColor });
+    }
+
+    function handleBuyNow() {
+      if (!currentProduct) return;
+      addToCart(currentProduct.id, detailQty, { color: selectedColor });
+      showToast('Instant Purchase Initiated', 'Transferring to protected checkout escrow...', 'success');
+    }
+
+    function switchProductTab(tabId, btn) {
+      document.querySelectorAll('.store-tabs-nav .store-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`ptab-${tabId}`).classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id') || 'aurapulse-pro';
+
+      const products = getCatalog();
+      currentProduct = products.find(p => p.id === productId) || products[0];
+      const vendor = MARKETPLACE_DATA.vendors.find(v => v.id === currentProduct.vendorId) || MARKETPLACE_DATA.vendors[0];
+
+      // Update Page Content
+      document.title = `${currentProduct.name} — Nexora Marketplace`;
+      document.getElementById('breadcrumbTitle').textContent = currentProduct.name;
+      document.getElementById('breadcrumbCategory').textContent = currentProduct.categoryName;
+      document.getElementById('breadcrumbCategory').href = `categories.html?cat=${currentProduct.category}`;
+
+      document.getElementById('productTitle').textContent = currentProduct.name;
+      document.getElementById('currentPriceDisplay').textContent = `$${currentProduct.price.toFixed(2)}`;
+      if (currentProduct.originalPrice) {
+        document.getElementById('originalPriceDisplay').textContent = `$${currentProduct.originalPrice.toFixed(2)}`;
+      } else {
+        document.getElementById('originalPriceDisplay').style.display = 'none';
+      }
+
+      document.getElementById('productDescription').textContent = currentProduct.description;
+      document.getElementById('ratingScore').textContent = currentProduct.rating;
+      document.getElementById('reviewsCountScore').textContent = currentProduct.reviewsCount;
+      document.getElementById('stockCountDisplay').textContent = currentProduct.stock;
+
+      // Update main image & gallery
+      document.getElementById('mainImageDisplay').src = currentProduct.image;
+      if (currentProduct.gallery && currentProduct.gallery.length > 1) {
+        const thumbRow = document.getElementById('galleryThumbnails');
+        thumbRow.innerHTML = currentProduct.gallery.map((imgSrc, idx) => `
+          <div class="thumb-item ${idx === 0 ? 'active' : ''}" onclick="switchGalleryImage('${imgSrc}', this)">
+            <img src="${imgSrc}" alt="${currentProduct.name} angle ${idx + 1}">
+          </div>
+        `).join('');
+      }
+
+      // Update Mini Vendor Card
+      document.getElementById('miniVendorName').textContent = vendor.name;
+      document.getElementById('miniVendorLogo').src = vendor.logo;
+      document.getElementById('miniVendorTagline').textContent = vendor.tagline;
+      document.getElementById('miniVendorStoreLink').href = `vendor-store.html?vendor=${vendor.slug}`;
+
+      // Render Related Products (3 distinct products)
+      const related = products.filter(p => p.id !== currentProduct.id).slice(0, 4);
+      const relatedGrid = document.getElementById('relatedProductsGrid');
+      relatedGrid.innerHTML = related.map(p => `
+        <div class="tilt-card product-card">
+          <div class="product-thumb-wrap">
+            ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
+            <button class="wishlist-toggle" onclick="toggleWishlist('${p.id}', this)" aria-label="Add to wishlist">♥</button>
+            <a href="product-details.html?id=${p.id}" style="width: 100%; height: 100%;">
+              <img src="${p.image}" alt="${p.name}" loading="lazy">
+            </a>
+          </div>
+          <a href="vendor-store.html?vendor=${p.vendorId}" class="product-vendor-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>${p.vendorName}</span>
+          </a>
+          <h3 class="product-title">
+            <a href="product-details.html?id=${p.id}">${p.name}</a>
+          </h3>
+          <div class="product-rating">
+            <span>★★★★★</span>
+            <span style="color: var(--text-dim); font-size: 0.8rem;">(${p.reviewsCount})</span>
+          </div>
+          <div class="product-pricing">
+            <span class="current-price">$${p.price.toFixed(2)}</span>
+            ${p.originalPrice ? `<span class="original-price">$${p.originalPrice.toFixed(2)}</span>` : ''}
+          </div>
+          <button class="add-cart-btn" onclick="addToCart('${p.id}', 1)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>Add to Cart</span>
+          </button>
+        </div>
+      `).join('');
+
+      initTiltEffect('.tilt-card');
+    });
+  </script>
+</body>
+</html>

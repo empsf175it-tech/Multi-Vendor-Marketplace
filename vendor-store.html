@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Audio Labs Storefront — Nexora Multi-Vendor Marketplace</title>
+  <meta name="description" content="Shop directly from Apex Audio Labs on Nexora. Certified studio-grade monitoring headphones, acoustic accessories, and precision tech with guaranteed escrow protection.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B35'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+  <style>
+    .store-hero-banner {
+      width: 100%;
+      height: 320px;
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-subtle);
+    }
+    .store-hero-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .store-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(9, 13, 22, 0.2) 0%, rgba(9, 13, 22, 0.85) 100%);
+    }
+    .store-profile-bar {
+      position: relative;
+      margin-top: -60px;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .store-avatar-large {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid var(--bg-surface);
+      background: #0B101D;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .store-avatar-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .store-tabs-nav {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 2.5rem;
+      overflow-x: auto;
+    }
+    .store-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.85rem 0.5rem;
+      cursor: pointer;
+      position: relative;
+      white-space: nowrap;
+      transition: color var(--transition-fast);
+    }
+    .store-tab-btn.active {
+      color: white;
+    }
+    .store-tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-gradient);
+      border-radius: var(--radius-full);
+    }
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    .store-info-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2.5rem;
+    }
+    .policy-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 860px) {
+      .store-profile-bar {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: -50px;
+      }
+      .store-info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span>NEXORA</span>
+      </a>
+
+      <!-- Search Bar -->
+      <form class="nav-search" id="navSearchForm">
+        <select aria-label="Search category filter">
+          <option value="all">All Categories</option>
+          <option value="audio">Audio & Sound</option>
+          <option value="electronics">Electronics</option>
+          <option value="home">Home & Living</option>
+        </select>
+        <input type="text" placeholder="Search catalog..." aria-label="Search catalog">
+        <button type="submit" class="search-btn" aria-label="Submit search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </form>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="categories.html" class="nav-link">Categories</a></li>
+          <li><a href="vendors.html" class="nav-link active">Vendors</a></li>
+          <li><a href="auth.html?role=vendor" class="nav-link">Become a Seller</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="action-btn" title="Merchant Dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+        <a href="auth.html" class="action-btn" title="Sign In / Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+        <button class="action-btn" onclick="toggleCartDrawer()" title="Shopping Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="badge-count cart-badge-count" style="display: none;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-bottom: 5rem;">
+    <!-- Store Header / Cover Banner -->
+    <div class="store-hero-banner">
+      <img id="vendorBannerImg" src="images/vendor_banner_1.jpg" alt="Vendor storefront cover banner">
+      <div class="store-banner-overlay"></div>
+    </div>
+
+    <!-- Store Profile Identity Bar -->
+    <div class="store-profile-bar">
+      <div style="display: flex; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap;">
+        <div class="store-avatar-large">
+          <img id="vendorLogoImg" src="images/vendor_logo_1.jpg" alt="Vendor store logo">
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <h1 id="vendorTitle" style="font-size: 2.2rem; font-weight: 800;">Apex Audio Labs</h1>
+            <span class="verified-icon" title="Verified Merchant Escrow" style="color: var(--trust-emerald);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </span>
+          </div>
+          <p id="vendorTagline" style="color: var(--text-muted); font-size: 1rem; margin-top: 0.25rem;">
+            Acoustic perfection engineered with aerospace-grade acoustics.
+          </p>
+          <div style="display: flex; align-items: center; gap: 1.25rem; font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem; flex-wrap: wrap;">
+            <span style="color: #FBBF24; font-weight: 700;">★ <span id="vendorRating">4.9</span> (<span id="vendorReviewsCount">1,240</span> reviews)</span>
+            <span>📍 <span id="vendorLocation">Stockholm, Sweden</span></span>
+            <span style="color: var(--trust-emerald);">⚡ Dispatch time: <span id="vendorDispatch">1-3 Days</span></span>
+            <span style="color: var(--trust-cyan);">💬 Avg response: <span id="vendorResponse">&lt; 1 hour</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 1rem;">
+        <button class="btn-secondary" id="followBtn" onclick="toggleFollowVendor()">
+          <span id="followIcon">+</span>
+          <span id="followText">Follow Store (<span id="vendorFollowers">14.2k</span>)</span>
+        </button>
+        <button class="btn-primary" onclick="openContactModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Contact Seller</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Storefront Navigation Tabs -->
+    <div class="store-tabs-nav">
+      <button class="store-tab-btn active" onclick="switchTab('products', this)">Listed Products (<span id="tabProductsCount">5</span>)</button>
+      <button class="store-tab-btn" onclick="switchTab('about', this)">Store Story & Policies</button>
+      <button class="store-tab-btn" onclick="switchTab('reviews', this)">Buyer Reviews (4.9 ★)</button>
+    </div>
+
+    <!-- Tab 1: Products Grid -->
+    <div class="tab-pane active" id="tab-products">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <h2 style="font-size: 1.35rem; color: white;">Direct From Merchant Workshop</h2>
+        <span style="font-size: 0.85rem; color: var(--trust-emerald);">✓ All items covered by 30-Day Escrow Guarantee</span>
+      </div>
+      <div class="products-grid" id="vendorProductsGrid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Tab 2: About & Policies -->
+    <div class="tab-pane" id="tab-about">
+      <div class="store-info-grid">
+        <div>
+          <div class="policy-box">
+            <h3 style="font-size: 1.25rem; color: white; margin-bottom: 1rem;">About Our Brand & Philosophy</h3>
+            <p id="vendorFullBio" style="color: var(--text-muted); line-height: 1.7; font-size: 0.95rem;">
+              Founded in Stockholm, Apex Audio Labs designs audiophile-grade monitoring headphones, studio monitors, and precision acoustic gear for discerning listeners and studio professionals worldwide.
+            </p>
+          </div>
+
+          <div class="policy-box">
+            <h3 style="font-size: 1.25rem; color: white; margin-bottom: 1rem;">Shipping & Fulfillment Timelines</h3>
+            <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.95rem; margin-bottom: 0.75rem;">
+              All orders are packed in custom anti-static protective eco-packaging within 24 to 48 hours of order confirmation. We use DHL Express and FedEx Insured Air Freight for worldwide transit.
+            </p>
+            <ul style="color: var(--text-muted); padding-left: 1.25rem; line-height: 1.8; font-size: 0.9rem;">
+              <li>Domestic / EU Express: 1–3 Business Days</li>
+              <li>North America & UK: 2–4 Business Days</li>
+              <li>Asia-Pacific & Rest of World: 3–6 Business Days</li>
+              <li>All packages include real-time tracking with recipient signature required.</li>
+            </ul>
+          </div>
+
+          <div class="policy-box">
+            <h3 style="font-size: 1.25rem; color: white; margin-bottom: 1rem;">30-Day Returns & Money-Back Policy</h3>
+            <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.95rem;">
+              We stand by our craftsmanship. If you are not completely spellbound by your audio gear within 30 days of delivery, return it in original condition for a 100% full refund with prepaid return shipping labels provided by Nexora.
+            </p>
+          </div>
+        </div>
+
+        <!-- Sidebar Info Card -->
+        <aside>
+          <div class="policy-box" style="background: rgba(16, 22, 38, 0.7);">
+            <h4 style="font-size: 1.1rem; color: white; margin-bottom: 1rem;">Merchant Credentials</h4>
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-dim);">Verification Status:</span>
+                <span style="color: var(--trust-emerald); font-weight: 700;">Level 3 Escrow Verified</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-dim);">Business Registration:</span>
+                <span style="color: white;">SE-556942-8810</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-dim);">Operating Studio:</span>
+                <span style="color: white;">Stockholm, Sweden</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-dim);">Nexora Member Since:</span>
+                <span style="color: white;">August 2023</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-dim);">Customer Support:</span>
+                <span style="color: var(--accent-primary); font-weight: 600;">Mon–Fri 8AM–6PM CET</span>
+              </div>
+            </div>
+            <button class="btn-primary" style="width: 100%; margin-top: 1.5rem; font-size: 0.9rem;" onclick="openContactModal()">
+              Send Direct Inquiry
+            </button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Tab 3: Customer Reviews -->
+    <div class="tab-pane" id="tab-reviews">
+      <div style="display: flex; align-items: center; gap: 2rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+        <div style="text-align: center; border-right: 1px solid var(--border-subtle); padding-right: 2rem;">
+          <div style="font-size: 3.5rem; font-weight: 800; color: white; line-height: 1;">4.9</div>
+          <div style="color: #FBBF24; font-size: 1.25rem; margin: 0.35rem 0;">★★★★★</div>
+          <div style="font-size: 0.85rem; color: var(--text-dim);">Based on 1,240 verified reviews</div>
+        </div>
+        <div style="flex: 1; min-width: 240px; font-size: 0.9rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+            <span>Product Craft & Quality</span>
+            <span style="color: var(--trust-emerald); font-weight: 700;">5.0 / 5.0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+            <span>Shipping Speed & Packaging</span>
+            <span style="color: var(--trust-emerald); font-weight: 700;">4.9 / 5.0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Merchant Communication</span>
+            <span style="color: var(--trust-emerald); font-weight: 700;">4.9 / 5.0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample Testimonials -->
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="policy-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <strong style="color: white;">Marcus V. (Stockholm, Sweden)</strong>
+            <span style="color: #FBBF24;">★★★★★</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            "The AuraPulse ANC headphones exceed every high-end wireless can I've ever tested. Arrived in Sweden within 24 hours. Incredible acoustic tuning!"
+          </p>
+        </div>
+        <div class="policy-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <strong style="color: white;">Elena S. (Berlin, Germany)</strong>
+            <span style="color: #FBBF24;">★★★★★</span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            "Super responsive seller. Answered my question regarding impedance within 10 minutes. The packaging looks like an art gallery piece."
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Contact Modal -->
+  <div id="contactModal" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 250; place-items: center; padding: 1.5rem;">
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; max-width: 500px; width: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; color: white;">Contact Merchant</h3>
+        <button onclick="closeContactModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.25rem; cursor: pointer;">✕</button>
+      </div>
+      <form onsubmit="handleContactSubmit(event)">
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem;">Your Name</label>
+          <input type="text" required style="width: 100%; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.6rem; color: white; outline: none;">
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem;">Your Email</label>
+          <input type="email" required style="width: 100%; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.6rem; color: white; outline: none;">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem;">Message to Seller</label>
+          <textarea rows="4" required placeholder="Ask about product details, custom orders, or shipping..." style="width: 100%; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.6rem; color: white; outline: none;"></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 0.85rem;">Send Message to Merchant</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Global Cart Drawer & Backdrop -->
+  <div class="cart-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Cart Drawer">
+    <div class="cart-header">
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: white;">Your Shopping Cart</h3>
+      </div>
+      <button class="cart-close-btn" onclick="toggleCartDrawer()" aria-label="Close cart">✕</button>
+    </div>
+    <div class="cart-items-list" id="cartItemsList"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Cart Subtotal</span>
+        <span id="cartSubtotal">$0.00</span>
+      </div>
+      <div class="cart-total-row grand-total">
+        <span>Estimated Total</span>
+        <span id="cartGrandTotal" style="color: var(--accent-primary);">$0.00</span>
+      </div>
+      <button class="btn-primary" style="width: 100%; padding: 0.95rem;" onclick="showToast('Checkout Initialized', 'Connecting to secure escrow checkout...', 'success')">
+        Proceed to Secure Checkout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo" style="margin-bottom: 1rem;">
+            <div class="brand-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span>NEXORA</span>
+          </div>
+          <p>The global multi-vendor commerce engine connecting independent master craftsmen, designers, and innovators directly with design-conscious patrons.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Marketplace</h4>
+          <ul class="footer-links">
+            <li><a href="categories.html">All Categories</a></li>
+            <li><a href="vendors.html">Vendor Directory</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">For Sellers</h4>
+          <ul class="footer-links">
+            <li><a href="auth.html?role=vendor">Open a Storefront</a></li>
+            <li><a href="dashboard.html">Seller Dashboard</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Trust & Security</h4>
+          <ul class="footer-links">
+            <li><a href="#">Escrow Guarantee</a></li>
+            <li><a href="#">Terms & Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 Nexora Marketplace Inc. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/tilt.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    let currentVendor = null;
+    let isFollowing = false;
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.store-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+    }
+
+    function toggleFollowVendor() {
+      isFollowing = !isFollowing;
+      const textEl = document.getElementById('followText');
+      const iconEl = document.getElementById('followIcon');
+      if (isFollowing) {
+        textEl.textContent = 'Following';
+        iconEl.textContent = '✓';
+        showToast('Store Followed', `You will now receive notifications when ${currentVendor.name} drops new collections.`, 'success');
+      } else {
+        textEl.textContent = `Follow Store (${currentVendor.followersCount})`;
+        iconEl.textContent = '+';
+        showToast('Unfollowed', `You unfollowed ${currentVendor.name}.`, 'info');
+      }
+    }
+
+    function openContactModal() {
+      const modal = document.getElementById('contactModal');
+      modal.style.display = 'grid';
+    }
+
+    function closeContactModal() {
+      const modal = document.getElementById('contactModal');
+      modal.style.display = 'none';
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      closeContactModal();
+      showToast('Message Dispatched', `Your inquiry was delivered to ${currentVendor.name}. Average response is under 1 hour.`, 'success');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('vendor') || 'apex-audio';
+
+      currentVendor = MARKETPLACE_DATA.vendors.find(v => v.slug === slug) || MARKETPLACE_DATA.vendors[0];
+
+      // Update Header Info
+      document.title = `${currentVendor.name} Storefront — Nexora Multi-Vendor Marketplace`;
+      document.getElementById('vendorBannerImg').src = currentVendor.banner;
+      document.getElementById('vendorLogoImg').src = currentVendor.logo;
+      document.getElementById('vendorTitle').textContent = currentVendor.name;
+      document.getElementById('vendorTagline').textContent = currentVendor.tagline;
+      document.getElementById('vendorRating').textContent = currentVendor.rating;
+      document.getElementById('vendorReviewsCount').textContent = currentVendor.reviewsCount;
+      document.getElementById('vendorLocation').textContent = currentVendor.location;
+      document.getElementById('vendorDispatch').textContent = currentVendor.shippingTime;
+      document.getElementById('vendorResponse').textContent = currentVendor.responseTime;
+      document.getElementById('vendorFollowers').textContent = currentVendor.followersCount;
+      document.getElementById('vendorFullBio').textContent = currentVendor.bio;
+
+      // Filter products for this vendor
+      const allProducts = getCatalog();
+      const vendorProducts = allProducts.filter(p => p.vendorId === currentVendor.id);
+      document.getElementById('tabProductsCount').textContent = vendorProducts.length;
+
+      const grid = document.getElementById('vendorProductsGrid');
+      grid.innerHTML = vendorProducts.map(p => `
+        <div class="tilt-card product-card">
+          <div class="product-thumb-wrap">
+            ${p.discount ? `<span class="discount-badge">${p.discount}</span>` : ''}
+            <button class="wishlist-toggle" onclick="toggleWishlist('${p.id}', this)" aria-label="Add to wishlist">♥</button>
+            <a href="product-details.html?id=${p.id}" style="width: 100%; height: 100%;">
+              <img src="${p.image}" alt="${p.name}" loading="lazy">
+            </a>
+          </div>
+          <div class="product-vendor-tag">
+            <span>${currentVendor.name}</span>
+          </div>
+          <h3 class="product-title">
+            <a href="product-details.html?id=${p.id}">${p.name}</a>
+          </h3>
+          <div class="product-rating">
+            <span>★★★★★</span>
+            <span style="color: var(--text-dim); font-size: 0.8rem;">(${p.reviewsCount})</span>
+          </div>
+          <div class="product-pricing">
+            <span class="current-price">$${p.price.toFixed(2)}</span>
+            ${p.originalPrice ? `<span class="original-price">$${p.originalPrice.toFixed(2)}</span>` : ''}
+          </div>
+          <button class="add-cart-btn" onclick="addToCart('${p.id}', 1)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>Add to Cart</span>
+          </button>
+        </div>
+      `).join('');
+
+      initTiltEffect('#vendorProductsGrid .tilt-card');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Authentication — Nexora Multi-Vendor Marketplace</title>
+  <meta name="description" content="Sign in or register a new customer or vendor merchant account on Nexora. Join a global community of verified artisan makers and design-conscious buyers.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B35'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+  <style>
+    .auth-wrapper {
+      min-height: calc(100vh - 160px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      position: relative;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 500px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2.75rem 2.5rem;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 35px rgba(255, 107, 53, 0.1);
+      position: relative;
+      z-index: 2;
+    }
+    .auth-toggle-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 0.35rem;
+      margin-bottom: 2rem;
+    }
+    .auth-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.65rem 0;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-align: center;
+    }
+    .auth-tab-btn.active {
+      background: var(--accent-gradient);
+      color: white;
+      box-shadow: var(--shadow-accent);
+    }
+    .auth-form-group {
+      margin-bottom: 1.25rem;
+    }
+    .auth-form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+    .auth-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.8rem 1rem;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .auth-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .vendor-toggle-box {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .switch-toggle {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+    .switch-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #334155;
+      transition: 0.3s;
+      border-radius: 34px;
+    }
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    input:checked + .switch-slider {
+      background-color: var(--trust-emerald);
+    }
+    input:checked + .switch-slider:before {
+      transform: translateX(22px);
+    }
+    .vendor-fields-container {
+      display: none;
+      background: rgba(16, 22, 38, 0.6);
+      border: 1px dashed rgba(16, 185, 129, 0.4);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.3s ease;
+    }
+    .social-auth-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.75rem;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .social-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span>NEXORA</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="categories.html" class="nav-link">Categories</a></li>
+          <li><a href="vendors.html" class="nav-link">Vendors</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+          Vendor Portal
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-wrapper">
+    <div class="auth-card">
+      <div style="text-align: center; margin-bottom: 1.75rem;">
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: white;" id="authHeaderTitle">Welcome Back</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.35rem;" id="authHeaderSubtitle">
+          Access your buyer orders or merchant dashboard
+        </p>
+      </div>
+
+      <!-- Tab Switcher: Sign In vs Sign Up -->
+      <div class="auth-toggle-tabs">
+        <button type="button" class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthMode('login')">Sign In</button>
+        <button type="button" class="auth-tab-btn" id="tabRegisterBtn" onclick="switchAuthMode('register')">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+        <div class="auth-form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" class="auth-input" placeholder="name@example.com" required value="alex.merchant@nexora.com">
+        </div>
+
+        <div class="auth-form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <label for="loginPassword" style="margin-bottom: 0;">Password</label>
+            <a href="#" onclick="showToast('Password Reset', 'Password recovery link dispatched to your email.', 'info')" style="font-size: 0.8rem; color: var(--accent-primary);">Forgot?</a>
+          </div>
+          <input type="password" id="loginPassword" class="auth-input" placeholder="••••••••" required value="NexoraMaster2026!">
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
+          <input type="checkbox" id="rememberMe" checked style="accent-color: var(--accent-primary);">
+          <label for="rememberMe" style="cursor: pointer;">Remember this session</label>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem;">
+          Sign In to Nexora
+        </button>
+      </form>
+
+      <!-- Register Form (Hidden by default) -->
+      <form id="registerForm" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+        <div class="auth-form-group">
+          <label for="regName">Full Legal Name</label>
+          <input type="text" id="regName" class="auth-input" placeholder="e.g. Henrik Lindqvist" required>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="regEmail">Email Address</label>
+          <input type="email" id="regEmail" class="auth-input" placeholder="name@example.com" required>
+        </div>
+
+        <!-- Vendor Toggle -->
+        <div class="vendor-toggle-box">
+          <div>
+            <strong style="color: white; font-size: 0.95rem; display: block;">Register as a Merchant Seller?</strong>
+            <span style="font-size: 0.75rem; color: var(--text-dim);">Enable storefront management & direct escrow payouts</span>
+          </div>
+          <label class="switch-toggle" aria-label="Toggle merchant registration">
+            <input type="checkbox" id="vendorModeCheckbox" onchange="toggleVendorFields(this.checked)">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <!-- Vendor Specific Fields -->
+        <div class="vendor-fields-container" id="vendorFields">
+          <div class="auth-form-group">
+            <label for="regStoreName">Storefront Name</label>
+            <input type="text" id="regStoreName" class="auth-input" placeholder="e.g. Nordic Timber Atelier">
+          </div>
+          <div class="auth-form-group">
+            <label for="regCategory">Primary Product Specialty</label>
+            <select id="regCategory" class="auth-input" style="background: var(--bg-surface);">
+              <option value="audio">Studio & Audiophile Sound</option>
+              <option value="home">Home & Living Decor</option>
+              <option value="fashion">Luxury Fashion & Apparel</option>
+              <option value="crafts">Artisanal Pottery & Crafts</option>
+              <option value="electronics">Consumer Electronics</option>
+            </select>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--trust-emerald);">
+            ✓ Instant Level 1 Merchant Verification on approval
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" class="auth-input" placeholder="Min. 8 characters" required minlength="8" oninput="checkPasswordStrength(this.value)">
+          <div id="passwordStrengthIndicator" style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 6px; overflow: hidden;">
+            <div id="strengthBar" style="height: 100%; width: 20%; background: #EF4444; transition: all 0.3s ease;"></div>
+          </div>
+          <div id="strengthText" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">Password strength: Weak</div>
+        </div>
+
+        <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 1.5rem; font-size: 0.8rem; color: var(--text-muted);">
+          <input type="checkbox" id="agreeTerms" required style="accent-color: var(--accent-primary); margin-top: 3px;">
+          <label for="agreeTerms">I accept Nexora's <a href="#" style="color: var(--accent-primary);">Merchant & Buyer Terms</a> and Privacy Policy.</label>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem;">
+          Create Nexora Account
+        </button>
+      </form>
+
+      <!-- Social Logins -->
+      <div style="position: relative; text-align: center; margin-top: 2rem;">
+        <span style="background: var(--bg-card); padding: 0 1rem; color: var(--text-dim); font-size: 0.8rem; position: relative; z-index: 1;">Or continue with</span>
+        <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-subtle);"></div>
+      </div>
+
+      <div class="social-auth-row">
+        <button class="social-btn" onclick="mockSocialLogin('Google')">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.2-2 .4-2.7L1.6 6.4C.6 8.4 0 10.6 0 12s.6 3.6 1.6 5.6l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.4-6.7-5.3L1.6 16C3.5 19.8 7.4 23 12 23z"/></svg>
+          <span>Google</span>
+        </button>
+        <button class="social-btn" onclick="mockSocialLogin('Apple')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.8 1.11-1.92.99-3.04-.96.04-2.12.64-2.8 1.44-.6.69-1.12 1.82-.98 2.92 1.07.08 2.14-.54 2.79-1.32z"/></svg>
+          <span>Apple ID</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none;">
+        <div>© 2026 Nexora Marketplace Inc. All rights reserved.</div>
+        <div style="display: flex; gap: 1.5rem;">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/store.js"></script>
+  <script>
+    function switchAuthMode(mode) {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const loginBtn = document.getElementById('tabLoginBtn');
+      const registerBtn = document.getElementById('tabRegisterBtn');
+      const title = document.getElementById('authHeaderTitle');
+      const subtitle = document.getElementById('authHeaderSubtitle');
+
+      if (mode === 'register') {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        loginBtn.classList.remove('active');
+        registerBtn.classList.add('active');
+        title.textContent = 'Create an Account';
+        subtitle.textContent = 'Start purchasing or launch your independent storefront';
+      } else {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+        loginBtn.classList.add('active');
+        registerBtn.classList.remove('active');
+        title.textContent = 'Welcome Back';
+        subtitle.textContent = 'Access your buyer orders or merchant dashboard';
+      }
+    }
+
+    function toggleVendorFields(isChecked) {
+      const container = document.getElementById('vendorFields');
+      container.style.display = isChecked ? 'block' : 'none';
+    }
+
+    function checkPasswordStrength(val) {
+      const bar = document.getElementById('strengthBar');
+      const text = document.getElementById('strengthText');
+      if (val.length < 6) {
+        bar.style.width = '20%';
+        bar.style.backgroundColor = '#EF4444';
+        text.textContent = 'Password strength: Weak';
+      } else if (val.length < 10) {
+        bar.style.width = '60%';
+        bar.style.backgroundColor = '#F59E0B';
+        text.textContent = 'Password strength: Medium';
+      } else {
+        bar.style.width = '100%';
+        bar.style.backgroundColor = '#10B981';
+        text.textContent = 'Password strength: Strong (Great!)';
+      }
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      localStorage.setItem('nexora_user', JSON.stringify({
+        email: email,
+        name: 'Alex Lindqvist',
+        role: 'vendor',
+        storeName: 'Apex Audio Labs'
+      }));
+
+      showToast('Login Successful', `Welcome back, Alex! Redirecting to dashboard...`, 'success');
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 800);
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const isVendor = document.getElementById('vendorModeCheckbox').checked;
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const storeName = document.getElementById('regStoreName').value || `${name}'s Atelier`;
+
+      localStorage.setItem('nexora_user', JSON.stringify({
+        email: email,
+        name: name,
+        role: isVendor ? 'vendor' : 'buyer',
+        storeName: storeName
+      }));
+
+      showToast('Registration Complete', `Welcome to Nexora, ${name}! Your account is active.`, 'success');
+      setTimeout(() => {
+        window.location.href = isVendor ? 'dashboard.html' : 'index.html';
+      }, 1000);
+    }
+
+    function mockSocialLogin(provider) {
+      showToast('OAuth Handshake', `Authenticating securely via ${provider}...`, 'info');
+      setTimeout(() => {
+        localStorage.setItem('nexora_user', JSON.stringify({
+          email: `user@${provider.toLowerCase()}.com`,
+          name: `${provider} Verified User`,
+          role: 'vendor',
+          storeName: 'Apex Audio Labs'
+        }));
+        showToast('Authorized', `Successfully signed in with ${provider}. Redirecting...`, 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 600);
+      }, 600);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('role') === 'vendor') {
+        switchAuthMode('register');
+        const vCheckbox = document.getElementById('vendorModeCheckbox');
+        if (vCheckbox) {
+          vCheckbox.checked = true;
+          toggleVendorFields(true);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

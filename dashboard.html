@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Command Center & Merchant Dashboard — Nexora</title>
+  <meta name="description" content="Manage products, track customer orders, view monthly earnings, and configure storefront policies in the Nexora Vendor Command Center.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B35'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+  <style>
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 80px);
+    }
+    .dash-sidebar {
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      padding: 2rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .dash-nav-item:hover {
+      background: var(--bg-card);
+      color: white;
+    }
+    .dash-nav-item.active {
+      background: rgba(255, 107, 53, 0.12);
+      color: var(--accent-primary);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+    }
+    .dash-content {
+      padding: 2.5rem 3rem;
+      overflow-y: auto;
+      background: var(--bg-dark);
+    }
+    .dash-section {
+      display: none;
+    }
+    .dash-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    .stats-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .stat-card:hover {
+      border-color: rgba(255, 107, 53, 0.35);
+      transform: translateY(-3px);
+    }
+    .stat-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: grid;
+      place-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: var(--font-heading);
+      color: white;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    .stat-trend {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-full);
+      margin-top: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .trend-up {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--trust-emerald);
+    }
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .data-table th {
+      background: rgba(9, 13, 22, 0.6);
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .data-table td {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.95rem;
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+    .data-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+    }
+    .status-delivered {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--trust-emerald);
+    }
+    .status-shipped {
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--trust-cyan);
+    }
+    .status-pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #F59E0B;
+    }
+    .action-icon-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: inline-grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .action-icon-btn:hover {
+      color: white;
+      border-color: var(--accent-primary);
+    }
+    .action-icon-btn.delete:hover {
+      color: #EF4444;
+      border-color: #EF4444;
+    }
+    .earnings-chart-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 400;
+      display: none;
+      place-items: center;
+      padding: 1.5rem;
+    }
+    @media (max-width: 1024px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+      .dash-sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .stats-overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .dash-content {
+        padding: 1.5rem;
+      }
+    }
+    @media (max-width: 640px) {
+      .stats-overview-grid {
+        grid-template-columns: 1fr;
+      }
+      .table-container {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Dashboard Navbar -->
+  <header class="navbar" style="position: sticky; top: 0; z-index: 100;">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span>NEXORA <span style="font-size: 0.75rem; background: var(--accent-gradient); padding: 0.2rem 0.5rem; border-radius: var(--radius-full); margin-left: 0.4rem;">MERCHANT</span></span>
+      </a>
+
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        <a href="vendor-store.html?vendor=apex-audio" target="_blank" class="btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <span>View Live Storefront</span>
+        </a>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem; background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 0.35rem 0.75rem; border-radius: var(--radius-full);">
+          <img src="images/vendor_logo_1.jpg" alt="Apex Audio Labs" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+          <span style="font-size: 0.85rem; font-weight: 700; color: white;">Apex Audio Labs</span>
+          <span style="color: var(--trust-emerald); font-size: 0.75rem;">● Online</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="dash-sidebar" aria-label="Vendor Dashboard Navigation">
+      <button class="dash-nav-item active" onclick="switchDashSection('overview', this)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Overview</span>
+      </button>
+      <button class="dash-nav-item" onclick="switchDashSection('products', this)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <span>Products Catalog</span>
+      </button>
+      <button class="dash-nav-item" onclick="switchDashSection('orders', this)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span>Orders (<span id="pendingOrdersCount">3</span>)</span>
+      </button>
+      <button class="dash-nav-item" onclick="switchDashSection('earnings', this)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        <span>Earnings & Payouts</span>
+      </button>
+      <button class="dash-nav-item" onclick="switchDashSection('settings', this)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span>Store Settings</span>
+      </button>
+
+      <div style="margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle);">
+        <a href="index.html" class="dash-nav-item" style="color: #EF4444;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span>Exit to Marketplace</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dash-content">
+      
+      <!-- ====================================================================
+           1. Overview Section
+           ==================================================================== -->
+      <div class="dash-section active" id="sec-overview">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: white;">Merchant Command Overview</h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Real-time performance metrics for Apex Audio Labs</p>
+          </div>
+          <button class="btn-primary" onclick="openAddProductModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Add New Product</span>
+          </button>
+        </div>
+
+        <!-- 4 Center-aligned Stat Cards (Required: Total Sales, Orders, Products, Rating) -->
+        <div class="stats-overview-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrap" style="background: rgba(255, 107, 53, 0.15); color: var(--accent-primary);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div class="stat-value">$84,230</div>
+            <div class="stat-label">Total Gross Sales</div>
+            <span class="stat-trend trend-up">↑ +18.4% vs last month</span>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap" style="background: rgba(6, 182, 212, 0.15); color: var(--trust-cyan);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            </div>
+            <div class="stat-value">1,248</div>
+            <div class="stat-label">Fulfilled Orders</div>
+            <span class="stat-trend trend-up">↑ +12.1% velocity</span>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap" style="background: rgba(16, 185, 129, 0.15); color: var(--trust-emerald);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
+            </div>
+            <div class="stat-value" id="dashProductsCount">5</div>
+            <div class="stat-label">Active Listed Goods</div>
+            <span class="stat-trend" style="background: rgba(255,255,255,0.05); color: white;">● All in stock</span>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap" style="background: rgba(251, 191, 36, 0.15); color: #FBBF24;">
+              ★
+            </div>
+            <div class="stat-value">4.9 ★</div>
+            <div class="stat-label">Merchant Trust Rating</div>
+            <span class="stat-trend trend-up">99.2% positive feedback</span>
+          </div>
+        </div>
+
+        <!-- Recent Orders Preview -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.35rem; color: white;">Recent Orders Requiring Dispatch</h2>
+          <button onclick="switchDashSection('orders', document.querySelectorAll('.dash-nav-item')[2])" style="background: none; border: none; color: var(--accent-primary); font-size: 0.9rem; cursor: pointer;">View All Orders →</button>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Purchased Item</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 700; color: white;">#NX-8921</td>
+                <td>Henrik Lindqvist (Stockholm, SE)</td>
+                <td>AuraPulse ANC Headphones</td>
+                <td style="color: var(--accent-primary); font-weight: 700;">$249.00</td>
+                <td><span class="status-badge status-pending">Processing</span></td>
+                <td><button class="btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" onclick="showToast('Dispatch Confirmed', 'Carrier pickup requested via DHL Express.', 'success')">Dispatch</button></td>
+              </tr>
+              <tr>
+                <td style="font-weight: 700; color: white;">#NX-8918</td>
+                <td>Claire Dupont (Paris, FR)</td>
+                <td>Chronos Sapphire Titanium Watch</td>
+                <td style="color: var(--accent-primary); font-weight: 700;">$380.00</td>
+                <td><span class="status-badge status-shipped">Shipped</span></td>
+                <td><span style="font-size: 0.8rem; color: var(--text-dim);">DHL-99214</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight: 700; color: white;">#NX-8904</td>
+                <td>Marcus Thorne (London, UK)</td>
+                <td>Heritage Classic 35mm Rangefinder</td>
+                <td style="color: var(--accent-primary); font-weight: 700;">$890.00</td>
+                <td><span class="status-badge status-delivered">Delivered</span></td>
+                <td><span style="font-size: 0.8rem; color: var(--trust-emerald);">Payout Released</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           2. Products Catalog Section (Add/Edit/Delete actions)
+           ==================================================================== -->
+      <div class="dash-section" id="sec-products">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 2rem; font-weight: 800; color: white;">Product Inventory Management</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Manage pricing, stock levels, and publish new designs to Nexora</p>
+          </div>
+          <button class="btn-primary" onclick="openAddProductModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>List New Product</span>
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Rating</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dashProductsTableBody">
+              <!-- Rendered dynamically from getCatalog() for this vendor -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           3. Orders Section
+           ==================================================================== -->
+      <div class="dash-section" id="sec-orders">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 2rem; font-weight: 800; color: white;">Store Orders & Fulfillment</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Monitor customer order statuses and confirm fulfillment</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="cat-pill active" onclick="filterOrderRows('all', this)">All</button>
+            <button class="cat-pill" onclick="filterOrderRows('pending', this)">Pending</button>
+            <button class="cat-pill" onclick="filterOrderRows('shipped', this)">Shipped</button>
+            <button class="cat-pill" onclick="filterOrderRows('delivered', this)">Delivered</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <tr data-status="pending">
+                <td style="font-weight: 700; color: white;">#NX-8921</td>
+                <td>Henrik Lindqvist<br><span style="font-size: 0.75rem; color: var(--text-dim);">Stockholm, Sweden</span></td>
+                <td>Today, 10:24 AM</td>
+                <td>AuraPulse ANC Studio Headphones (x1)</td>
+                <td style="color: var(--accent-primary); font-weight: 700;">$249.00</td>
+                <td><span class="status-badge status-pending">Pending Dispatch</span></td>
+                <td><button class="btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" onclick="markOrderShipped(this)">Mark Shipped</button></td>
+              </tr>
+              <tr data-status="pending">
+                <td style="font-weight: 700; color: white;">#NX-8919</td>
+                <td>Johan Berg (Gothenburg, SE)</td>
+                <td>KeyCraft Mechanical Keyboard (x1)</td>
+                <td>Yesterday</td>
+                <td style="color: var(--accent-primary); font-weight: 700;">$210.00</td>
+                <td><span class="status-badge status-pending">Pending Dispatch</span></td>
+                <td><button class="btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" onclick="markOrderShipped(this)">Mark Shipped</button></td>
+              </tr>
+              <tr data-status="shipped">
+                <td style="font-weight: 700; color: white;">#NX-8918</td>
+                <td>Claire Dupont (Paris, France)</td>
+                <td>Chronos Sapphire Titanium Watch (x1)</td>
+                <td>Sept 12, 2026</td>
+                <td style="color: var(--accent-primary); font-weight: 700;">$380.00</td>
+                <td><span class="status-badge status-shipped">In Transit</span></td>
+                <td><span style="font-size: 0.8rem; color: var(--trust-cyan);">Tracking: #DHL-99214</span></td>
+              </tr>
+              <tr data-status="delivered">
+                <td style="font-weight: 700; color: white;">#NX-8904</td>
+                <td>Marcus Thorne (London, UK)</td>
+                <td>Heritage Classic 35mm Camera (x1)</td>
+                <td>Sept 10, 2026</td>
+                <td style="color: var(--accent-primary); font-weight: 700;">$890.00</td>
+                <td><span class="status-badge status-delivered">Delivered</span></td>
+                <td><span style="font-size: 0.8rem; color: var(--trust-emerald);">Payout Settled</span></td>
+              </tr>
+              <tr data-status="delivered">
+                <td style="font-weight: 700; color: white;">#NX-8890</td>
+                <td>Astrid Lind (Oslo, Norway)</td>
+                <td>AeroView 4K Aerial Drone (x1)</td>
+                <td>Sept 08, 2026</td>
+                <td style="color: var(--accent-primary); font-weight: 700;">$499.00</td>
+                <td><span class="status-badge status-delivered">Delivered</span></td>
+                <td><span style="font-size: 0.8rem; color: var(--trust-emerald);">Payout Settled</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           4. Earnings Section
+           ==================================================================== -->
+      <div class="dash-section" id="sec-earnings">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 2rem; font-weight: 800; color: white;">Merchant Revenue & Escrow Payouts</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Track escrow clearances, net payouts, and automated transfers</p>
+          </div>
+          <button class="btn-emerald" onclick="openWithdrawModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+            <span>Withdraw Cleared Funds ($12,450.00)</span>
+          </button>
+        </div>
+
+        <!-- SVG Visual Revenue Chart -->
+        <div class="earnings-chart-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+              <div style="font-size: 0.85rem; color: var(--text-dim);">6-MONTH REVENUE TRAJECTORY</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: white;">$84,230.50 Net</div>
+            </div>
+            <span style="font-size: 0.85rem; color: var(--trust-emerald); font-weight: 700;">↑ 24% Year-over-Year Growth</span>
+          </div>
+
+          <!-- SVG Bar Chart -->
+          <div style="height: 220px; width: 100%;">
+            <svg viewBox="0 0 600 200" style="width: 100%; height: 100%; overflow: visible;">
+              <!-- Grid lines -->
+              <line x1="40" y1="20" x2="580" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+              <line x1="40" y1="70" x2="580" y2="70" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+              <line x1="40" y1="120" x2="580" y2="120" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+              <line x1="40" y1="170" x2="580" y2="170" stroke="rgba(255,255,255,0.1)"/>
+
+              <!-- Bars with gradients -->
+              <defs>
+                <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#FF6B35"/>
+                  <stop offset="100%" stop-color="#FFA62B" stop-opacity="0.3"/>
+                </linearGradient>
+                <linearGradient id="barGradEmerald" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#10B981"/>
+                  <stop offset="100%" stop-color="#059669" stop-opacity="0.3"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Apr ($9.2k) -->
+              <rect x="70" y="110" width="45" height="60" rx="6" fill="url(#barGrad)"/>
+              <text x="92" y="190" fill="#94A3B8" font-size="12" text-anchor="middle">Apr</text>
+              <text x="92" y="100" fill="#FFFFFF" font-size="11" text-anchor="middle" font-weight="700">$9.2k</text>
+
+              <!-- May ($11.4k) -->
+              <rect x="155" y="90" width="45" height="80" rx="6" fill="url(#barGrad)"/>
+              <text x="177" y="190" fill="#94A3B8" font-size="12" text-anchor="middle">May</text>
+              <text x="177" y="80" fill="#FFFFFF" font-size="11" text-anchor="middle" font-weight="700">$11.4k</text>
+
+              <!-- Jun ($13.8k) -->
+              <rect x="240" y="70" width="45" height="100" rx="6" fill="url(#barGrad)"/>
+              <text x="262" y="190" fill="#94A3B8" font-size="12" text-anchor="middle">Jun</text>
+              <text x="262" y="60" fill="#FFFFFF" font-size="11" text-anchor="middle" font-weight="700">$13.8k</text>
+
+              <!-- Jul ($15.1k) -->
+              <rect x="325" y="60" width="45" height="110" rx="6" fill="url(#barGrad)"/>
+              <text x="347" y="190" fill="#94A3B8" font-size="12" text-anchor="middle">Jul</text>
+              <text x="347" y="50" fill="#FFFFFF" font-size="11" text-anchor="middle" font-weight="700">$15.1k</text>
+
+              <!-- Aug ($16.8k) -->
+              <rect x="410" y="45" width="45" height="125" rx="6" fill="url(#barGrad)"/>
+              <text x="432" y="190" fill="#94A3B8" font-size="12" text-anchor="middle">Aug</text>
+              <text x="432" y="35" fill="#FFFFFF" font-size="11" text-anchor="middle" font-weight="700">$16.8k</text>
+
+              <!-- Sept (Current $17.9k) -->
+              <rect x="495" y="30" width="45" height="140" rx="6" fill="url(#barGradEmerald)"/>
+              <text x="517" y="190" fill="#10B981" font-size="12" text-anchor="middle" font-weight="700">Sept (Now)</text>
+              <text x="517" y="20" fill="#10B981" font-size="12" text-anchor="middle" font-weight="800">$17.9k</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Payout Transaction History -->
+        <h3 style="font-size: 1.3rem; color: white; margin-bottom: 1rem;">Recent Escrow Payout Dispatches</h3>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Transaction Reference</th>
+                <th>Destination Account</th>
+                <th>Date Settled</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 700; color: white;">#TRX-99418</td>
+                <td>SEB Bank (Stockholm) •••• 4192</td>
+                <td>Sept 01, 2026</td>
+                <td style="color: var(--trust-emerald); font-weight: 700;">$14,820.00</td>
+                <td><span class="status-badge status-delivered">Transferred</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight: 700; color: white;">#TRX-98830</td>
+                <td>SEB Bank (Stockholm) •••• 4192</td>
+                <td>Aug 15, 2026</td>
+                <td style="color: var(--trust-emerald); font-weight: 700;">$12,650.00</td>
+                <td><span class="status-badge status-delivered">Transferred</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight: 700; color: white;">#TRX-97641</td>
+                <td>SEB Bank (Stockholm) •••• 4192</td>
+                <td>Aug 01, 2026</td>
+                <td style="color: var(--trust-emerald); font-weight: 700;">$11,400.00</td>
+                <td><span class="status-badge status-delivered">Transferred</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           5. Store Settings Section
+           ==================================================================== -->
+      <div class="dash-section" id="sec-settings">
+        <div style="margin-bottom: 2rem;">
+          <h2 style="font-size: 2rem; font-weight: 800; color: white;">Store Profile & Policies</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Configure your public merchant storefront information</p>
+        </div>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2.5rem; max-width: 780px;">
+          <form onsubmit="handleSettingsSave(event)">
+            <div class="auth-form-group">
+              <label>Store Brand Name</label>
+              <input type="text" class="auth-input" value="Apex Audio Labs" required id="settingStoreName">
+            </div>
+
+            <div class="auth-form-group">
+              <label>Tagline / Specialty</label>
+              <input type="text" class="auth-input" value="Acoustic perfection engineered with aerospace-grade acoustics." required id="settingTagline">
+            </div>
+
+            <div class="auth-form-group">
+              <label>Store Bio / Atelier Story</label>
+              <textarea class="auth-input" rows="4" style="resize: vertical;" id="settingBio">Founded in Stockholm, Apex Audio Labs designs audiophile-grade monitoring headphones, studio monitors, and precision acoustic gear for discerning listeners and studio professionals worldwide.</textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+              <div class="auth-form-group">
+                <label>Studio Location</label>
+                <input type="text" class="auth-input" value="Stockholm, Sweden" required id="settingLocation">
+              </div>
+              <div class="auth-form-group">
+                <label>Dispatch Lead Time</label>
+                <input type="text" class="auth-input" value="1-3 Business Days" required id="settingDispatch">
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label>Merchant Support Email</label>
+              <input type="email" class="auth-input" value="support@apexaudio.se" required id="settingEmail">
+            </div>
+
+            <button type="submit" class="btn-primary" style="padding: 0.85rem 2rem; margin-top: 1rem;">
+              Save Profile Changes
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Add Product Modal -->
+  <div class="modal-overlay" id="addProductModal">
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2.25rem; max-width: 550px; width: 100%; box-shadow: var(--shadow-lg);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.35rem; color: white;">List a New Product</h3>
+        <button onclick="closeAddProductModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.25rem; cursor: pointer;">✕</button>
+      </div>
+
+      <form onsubmit="handleNewProductSubmit(event)">
+        <div class="auth-form-group">
+          <label>Product Title</label>
+          <input type="text" id="newProdName" class="auth-input" placeholder="e.g. Apex Reference In-Ear Monitors" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="auth-form-group">
+            <label>Price ($ USD)</label>
+            <input type="number" step="0.01" id="newProdPrice" class="auth-input" placeholder="199.00" required>
+          </div>
+          <div class="auth-form-group">
+            <label>Stock Units</label>
+            <input type="number" id="newProdStock" class="auth-input" placeholder="25" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label>Category Department</label>
+          <select id="newProdCategory" class="auth-input" style="background: var(--bg-surface);">
+            <option value="audio">Studio & Audiophile Sound</option>
+            <option value="electronics">Electronics & Tech</option>
+            <option value="home">Home & Living</option>
+            <option value="fashion">Fashion & Apparel</option>
+          </select>
+        </div>
+
+        <div class="auth-form-group">
+          <label>Short Description</label>
+          <textarea id="newProdDesc" class="auth-input" rows="3" placeholder="Highlight acoustic materials, specs, or build quality..." required></textarea>
+        </div>
+
+        <div class="auth-form-group">
+          <label>Sample Image Asset</label>
+          <select id="newProdImage" class="auth-input" style="background: var(--bg-surface);">
+            <option value="images/prod_headphones.jpg">Matte Studio Headphones</option>
+            <option value="images/prod_watch.jpg">Titanium Minimalist Watch</option>
+            <option value="images/prod_keyboard.jpg">Custom Mechanical Keyboard</option>
+            <option value="images/prod_camera.jpg">Vintage Rangefinder Camera</option>
+            <option value="images/prod_drone.jpg">Compact 4K Aerial Drone</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <button type="button" class="btn-secondary" style="flex: 1;" onclick="closeAddProductModal()">Cancel</button>
+          <button type="submit" class="btn-primary" style="flex: 1;">Publish Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Withdraw Funds Modal -->
+  <div class="modal-overlay" id="withdrawModal">
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2.25rem; max-width: 480px; width: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.35rem; color: white;">Withdraw Cleared Funds</h3>
+        <button onclick="closeWithdrawModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.25rem; cursor: pointer;">✕</button>
+      </div>
+      <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+        <div style="font-size: 0.85rem; color: var(--trust-emerald);">AVAILABLE ESCROW BALANCE</div>
+        <div style="font-size: 2rem; font-weight: 800; color: white;">$12,450.00</div>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+        Payouts are processed instantly via automated SWIFT/SEPA transfer to SEB Bank (Stockholm) •••• 4192.
+      </p>
+      <button class="btn-emerald" style="width: 100%; padding: 0.9rem;" onclick="confirmWithdrawal()">
+        Confirm $12,450.00 Transfer
+      </button>
+    </div>
+  </div>
+
+  <script src="js/tilt.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    function switchDashSection(secId, btn) {
+      document.querySelectorAll('.dash-nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`sec-${secId}`).classList.add('active');
+    }
+
+    function renderProductsTable() {
+      const products = getCatalog().filter(p => p.vendorId === 'apex-audio');
+      const tbody = document.getElementById('dashProductsTableBody');
+      const countEl = document.getElementById('dashProductsCount');
+      if (countEl) countEl.textContent = products.length;
+
+      if (!tbody) return;
+
+      tbody.innerHTML = products.map((p, idx) => `
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.85rem;">
+              <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover;">
+              <div>
+                <a href="product-details.html?id=${p.id}" target="_blank" style="font-weight: 700; color: white;">${p.name}</a>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">${p.id}</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="font-size: 0.85rem; color: var(--trust-cyan);">${p.categoryName || p.category}</span></td>
+          <td style="font-weight: 700; color: var(--accent-primary);">$${p.price.toFixed(2)}</td>
+          <td><span style="color: var(--trust-emerald); font-weight: 600;">${p.stock} units</span></td>
+          <td><span style="color: #FBBF24;">★ ${p.rating}</span></td>
+          <td>
+            <div style="display: flex; gap: 0.4rem;">
+              <button class="action-icon-btn" title="View details" onclick="window.location.href='product-details.html?id=${p.id}'">👁</button>
+              <button class="action-icon-btn delete" title="Delete product" onclick="deleteProduct('${p.id}')">🗑</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function deleteProduct(productId) {
+      let catalog = getCatalog();
+      const p = catalog.find(x => x.id === productId);
+      if (!p) return;
+
+      if (confirm(`Are you sure you want to remove "${p.name}" from your store catalog?`)) {
+        catalog = catalog.filter(x => x.id !== productId);
+        saveCatalog(catalog);
+        renderProductsTable();
+        showToast('Product Removed', `${p.name} was removed from your store inventory.`, 'info');
+      }
+    }
+
+    function openAddProductModal() {
+      document.getElementById('addProductModal').style.display = 'grid';
+    }
+
+    function closeAddProductModal() {
+      document.getElementById('addProductModal').style.display = 'none';
+    }
+
+    function handleNewProductSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('newProdName').value;
+      const price = parseFloat(document.getElementById('newProdPrice').value) || 99;
+      const stock = parseInt(document.getElementById('newProdStock').value) || 10;
+      const category = document.getElementById('newProdCategory').value;
+      const desc = document.getElementById('newProdDesc').value;
+      const img = document.getElementById('newProdImage').value;
+
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const newProduct = {
+        id: slug,
+        slug: slug,
+        name: name,
+        vendorId: 'apex-audio',
+        vendorName: 'Apex Audio Labs',
+        category: category,
+        categoryName: category === 'audio' ? 'Studio & Audiophile Sound' : 'Consumer Electronics',
+        price: price,
+        originalPrice: price * 1.2,
+        discount: '15% OFF',
+        rating: 5.0,
+        reviewsCount: 1,
+        stock: stock,
+        image: img,
+        gallery: [img],
+        isFeatured: false,
+        isTrending: true,
+        description: desc
+      };
+
+      const catalog = getCatalog();
+      catalog.unshift(newProduct);
+      saveCatalog(catalog);
+
+      closeAddProductModal();
+      renderProductsTable();
+      showToast('Product Published', `${name} is now live in the marketplace!`, 'success');
+    }
+
+    function filterOrderRows(status, btn) {
+      document.querySelectorAll('#sec-orders .cat-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const rows = document.querySelectorAll('#ordersTableBody tr');
+      rows.forEach(r => {
+        if (status === 'all' || r.dataset.status === status) {
+          r.style.display = '';
+        } else {
+          r.style.display = 'none';
+        }
+      });
+    }
+
+    function markOrderShipped(btn) {
+      const tr = btn.closest('tr');
+      tr.dataset.status = 'shipped';
+      const badge = tr.querySelector('.status-badge');
+      badge.className = 'status-badge status-shipped';
+      badge.textContent = 'Shipped';
+      btn.parentElement.innerHTML = '<span style="font-size: 0.8rem; color: var(--trust-cyan);">DHL-NEW99</span>';
+      showToast('Dispatch Confirmed', 'Carrier pickup requested. Tracking uploaded to customer.', 'success');
+    }
+
+    function openWithdrawModal() {
+      document.getElementById('withdrawModal').style.display = 'grid';
+    }
+
+    function closeWithdrawModal() {
+      document.getElementById('withdrawModal').style.display = 'none';
+    }
+
+    function confirmWithdrawal() {
+      closeWithdrawModal();
+      showToast('Withdrawal Processed', '$12,450.00 wired to SEB Bank. Ref: #TRX-99512.', 'success');
+    }
+
+    function handleSettingsSave(e) {
+      e.preventDefault();
+      showToast('Store Profile Updated', 'Your storefront changes are now visible to buyers.', 'success');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProductsTable();
+    });
+  </script>
+</body>
+</html>
