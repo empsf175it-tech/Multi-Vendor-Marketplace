@@ -8,14 +8,14 @@
 
 const MARKETPLACE_DATA = {
   categories: [
-    { id: 'electronics', name: 'Electronics & Smart Tech', count: '1,420+ items', image: 'images/cat_electronics.jpg', slug: 'electronics' },
-    { id: 'home', name: 'Home & Living Decor', count: '890+ items', image: 'images/cat_home.jpg', slug: 'home' },
-    { id: 'fashion', name: 'Luxury Fashion & Apparel', count: '2,150+ items', image: 'images/cat_fashion.jpg', slug: 'fashion' },
-    { id: 'beauty', name: 'Clean Beauty & Skincare', count: '640+ items', image: 'images/cat_beauty.jpg', slug: 'beauty' },
-    { id: 'crafts', name: 'Artisanal & Handmade', count: '1,120+ items', image: 'images/cat_crafts.jpg', slug: 'crafts' },
-    { id: 'sports', name: 'Active Gear & Outdoors', count: '780+ items', image: 'images/cat_sports.jpg', slug: 'sports' },
-    { id: 'gourmet', name: 'Gourmet Pantry & Coffee', count: '430+ items', image: 'images/cat_gourmet.jpg', slug: 'gourmet' },
-    { id: 'audio', name: 'Studio & Audiophile Sound', count: '560+ items', image: 'images/cat_audio.jpg', slug: 'audio' }
+    { id: 'electronics', name: 'Electronics & Smart Tech', count: '1,420+ items', image: 'assets/images/cat_electronics.jpg', slug: 'electronics' },
+    { id: 'home', name: 'Home & Living Decor', count: '890+ items', image: 'assets/images/cat_home.jpg', slug: 'home' },
+    { id: 'fashion', name: 'Luxury Fashion & Apparel', count: '2,150+ items', image: 'assets/images/cat_fashion.jpg', slug: 'fashion' },
+    { id: 'beauty', name: 'Clean Beauty & Skincare', count: '640+ items', image: 'assets/images/cat_beauty.jpg', slug: 'beauty' },
+    { id: 'crafts', name: 'Artisanal & Handmade', count: '1,120+ items', image: 'assets/images/cat_crafts.jpg', slug: 'crafts' },
+    { id: 'sports', name: 'Active Gear & Outdoors', count: '780+ items', image: 'assets/images/cat_sports.jpg', slug: 'sports' },
+    { id: 'gourmet', name: 'Gourmet Pantry & Coffee', count: '430+ items', image: 'assets/images/cat_gourmet.jpg', slug: 'gourmet' },
+    { id: 'audio', name: 'Studio & Audiophile Sound', count: '560+ items', image: 'assets/images/cat_audio.jpg', slug: 'audio' }
   ],
 
   vendors: [
@@ -32,8 +32,8 @@ const MARKETPLACE_DATA = {
       category: 'Studio & Audiophile Sound',
       tagline: 'Acoustic perfection engineered with aerospace-grade acoustics.',
       bio: 'Founded in Stockholm, Apex Audio Labs designs audiophile-grade monitoring headphones, studio monitors, and precision acoustic gear for discerning listeners and studio professionals worldwide.',
-      banner: 'images/vendor_banner_1.jpg',
-      logo: 'images/vendor_logo_1.jpg',
+      banner: 'assets/images/vendor_banner_1.jpg',
+      logo: 'assets/images/vendor_logo_1.jpg',
       location: 'Stockholm, Sweden',
       joinedYear: '2023',
       responseTime: '< 1 hour',
@@ -52,8 +52,8 @@ const MARKETPLACE_DATA = {
       category: 'Home & Living Decor',
       tagline: 'Nordic minimalism, sustainable oak furnishings, and sculptural lighting.',
       bio: 'Crafting serene home sanctuaries through sustainable materials, warm ambient lighting, and bespoke architectural furniture engineered for timeless living spaces.',
-      banner: 'images/vendor_banner_2.jpg',
-      logo: 'images/vendor_logo_2.jpg',
+      banner: 'assets/images/vendor_banner_2.jpg',
+      logo: 'assets/images/vendor_logo_2.jpg',
       location: 'Copenhagen, Denmark',
       joinedYear: '2022',
       responseTime: '< 2 hours',
@@ -72,8 +72,8 @@ const MARKETPLACE_DATA = {
       category: 'Luxury Fashion & Apparel',
       tagline: 'Modern luxury silhouettes hand-tailored from organic fabrics.',
       bio: 'An independent atelier dedicated to slow fashion, ethical silk and wool tailoring, and contemporary everyday wear designed to outlast passing trends.',
-      banner: 'images/vendor_banner_3.jpg',
-      logo: 'images/vendor_logo_3.jpg',
+      banner: 'assets/images/vendor_banner_3.jpg',
+      logo: 'assets/images/vendor_logo_3.jpg',
       location: 'Milan, Italy',
       joinedYear: '2021',
       responseTime: '< 30 mins',
@@ -92,8 +92,8 @@ const MARKETPLACE_DATA = {
       category: 'Artisanal & Handmade',
       tagline: 'Wheel-thrown ceramic homewares and handcrafted pottery.',
       bio: 'Every vessel, plate, and planter is shaped by hand on the potter wheel and fired in small batches using local mineral glazes and ancestral techniques.',
-      banner: 'images/vendor_banner_4.jpg',
-      logo: 'images/vendor_logo_4.jpg',
+      banner: 'assets/images/vendor_banner_4.jpg',
+      logo: 'assets/images/vendor_logo_4.jpg',
       location: 'Kyoto, Japan',
       joinedYear: '2023',
       responseTime: '< 1 hour',
@@ -116,8 +116,8 @@ const MARKETPLACE_DATA = {
       rating: 4.9,
       reviewsCount: 428,
       stock: 14,
-      image: 'images/prod_headphones.jpg',
-      gallery: ['images/prod_headphones.jpg', 'images/gallery_1.jpg', 'images/gallery_2.jpg', 'images/gallery_3.jpg', 'images/gallery_4.jpg'],
+      image: 'assets/images/prod_headphones.jpg',
+      gallery: ['assets/images/prod_headphones.jpg', 'assets/images/gallery_1.jpg', 'assets/images/gallery_2.jpg', 'assets/images/gallery_3.jpg', 'assets/images/gallery_4.jpg'],
       isFeatured: true,
       isTrending: true,
       description: 'Experience pure sonic fidelity. Custom-engineered 45mm beryllium drivers deliver ultra-low distortion, deep visceral bass, and expansive soundstage. Featuring hybrid 42dB active noise cancellation with spatial audio tracking and 40-hour continuous battery life.'
@@ -136,8 +136,8 @@ const MARKETPLACE_DATA = {
       rating: 4.8,
       reviewsCount: 194,
       stock: 9,
-      image: 'images/prod_watch.jpg',
-      gallery: ['images/prod_watch.jpg'],
+      image: 'assets/images/prod_watch.jpg',
+      gallery: ['assets/images/prod_watch.jpg'],
       isFeatured: true,
       isTrending: true,
       description: 'Aerospace-grade grade-5 titanium casing fitted with anti-reflective sapphire crystal glass. Swiss automatic movement with 48-hour power reserve and water resistance up to 10 ATM.'
@@ -156,8 +156,8 @@ const MARKETPLACE_DATA = {
       rating: 4.9,
       reviewsCount: 312,
       stock: 18,
-      image: 'images/prod_bag.jpg',
-      gallery: ['images/prod_bag.jpg'],
+      image: 'assets/images/prod_bag.jpg',
+      gallery: ['assets/images/prod_bag.jpg'],
       isFeatured: false,
       isTrending: true,
       description: 'Vegetable-tanned full-grain Italian leather hand-stitched with waxed linen thread. Includes solid brass hardware, padded laptop sleeve, and water-resistant interior lining.'
@@ -176,8 +176,8 @@ const MARKETPLACE_DATA = {
       rating: 5.0,
       reviewsCount: 88,
       stock: 6,
-      image: 'images/prod_camera.jpg',
-      gallery: ['images/prod_camera.jpg'],
+      image: 'assets/images/prod_camera.jpg',
+      gallery: ['assets/images/prod_camera.jpg'],
       isFeatured: true,
       isTrending: true,
       description: 'Tactile analog dials married with a full-frame 24MP BSI CMOS sensor. High contrast optical viewfinder and uncompressed RAW recording for purist photographers.'
@@ -196,8 +196,8 @@ const MARKETPLACE_DATA = {
       rating: 4.8,
       reviewsCount: 142,
       stock: 22,
-      image: 'images/prod_lamp.jpg',
-      gallery: ['images/prod_lamp.jpg'],
+      image: 'assets/images/prod_lamp.jpg',
+      gallery: ['assets/images/prod_lamp.jpg'],
       isFeatured: false,
       isTrending: true,
       description: 'Cast aluminium disc with warm 2700K diffusion LED ring. Stepless capacitive touch dimmer with memory brightness function and anodized matte champagne finish.'
@@ -216,8 +216,8 @@ const MARKETPLACE_DATA = {
       rating: 4.9,
       reviewsCount: 97,
       stock: 5,
-      image: 'images/prod_chair.jpg',
-      gallery: ['images/prod_chair.jpg'],
+      image: 'assets/images/prod_chair.jpg',
+      gallery: ['assets/images/prod_chair.jpg'],
       isFeatured: true,
       isTrending: true,
       description: 'Solid FSC-certified American walnut frame with steam-bent curvature and high-density memory foam upholstered in textured bouclé fabric.'
@@ -236,8 +236,8 @@ const MARKETPLACE_DATA = {
       rating: 4.7,
       reviewsCount: 520,
       stock: 35,
-      image: 'images/prod_sneakers.jpg',
-      gallery: ['images/prod_sneakers.jpg'],
+      image: 'assets/images/prod_sneakers.jpg',
+      gallery: ['assets/images/prod_sneakers.jpg'],
       isFeatured: false,
       isTrending: true,
       description: 'Seamless recycled poly-knit upper with dynamic carbon propulsion plate and ultra-cushioned supercritical nitrogen-infused midsole foam.'
@@ -256,8 +256,8 @@ const MARKETPLACE_DATA = {
       rating: 4.9,
       reviewsCount: 380,
       stock: 45,
-      image: 'images/prod_skincare.jpg',
-      gallery: ['images/prod_skincare.jpg'],
+      image: 'assets/images/prod_skincare.jpg',
+      gallery: ['assets/images/prod_skincare.jpg'],
       isFeatured: false,
       isTrending: true,
       description: 'Cold-pressed wild rosehip, squalane, and bakuchiol extract designed to deeply nourish the cellular lipid barrier and restore radiant firmness.'
@@ -276,8 +276,8 @@ const MARKETPLACE_DATA = {
       rating: 4.9,
       reviewsCount: 260,
       stock: 12,
-      image: 'images/prod_keyboard.jpg',
-      gallery: ['images/prod_keyboard.jpg'],
+      image: 'assets/images/prod_keyboard.jpg',
+      gallery: ['assets/images/prod_keyboard.jpg'],
       isFeatured: false,
       isTrending: false,
       description: 'CNC machined anodized 6063 aluminium chassis, hot-swappable PCB, factory-lubed linear switches, and gasket-mounted acoustic sound dampening.'
@@ -296,8 +296,8 @@ const MARKETPLACE_DATA = {
       rating: 4.8,
       reviewsCount: 175,
       stock: 24,
-      image: 'images/prod_coffee.jpg',
-      gallery: ['images/prod_coffee.jpg'],
+      image: 'assets/images/prod_coffee.jpg',
+      gallery: ['assets/images/prod_coffee.jpg'],
       isFeatured: false,
       isTrending: false,
       description: 'PID controlled variable temperature gooseneck kettle with double-walled borosilicate glass dripper and precision 0.1g digital brew scale.'
@@ -316,8 +316,8 @@ const MARKETPLACE_DATA = {
       rating: 4.7,
       reviewsCount: 140,
       stock: 20,
-      image: 'images/prod_sunglasses.jpg',
-      gallery: ['images/prod_sunglasses.jpg'],
+      image: 'assets/images/prod_sunglasses.jpg',
+      gallery: ['assets/images/prod_sunglasses.jpg'],
       isFeatured: false,
       isTrending: false,
       description: 'Ultralight Japanese titanium frame weighing just 18 grams with multi-layer hydrophobic oleophobic polarized lenses providing 100% UV400 defense.'
@@ -336,8 +336,8 @@ const MARKETPLACE_DATA = {
       rating: 4.9,
       reviewsCount: 92,
       stock: 8,
-      image: 'images/prod_drone.jpg',
-      gallery: ['images/prod_drone.jpg'],
+      image: 'assets/images/prod_drone.jpg',
+      gallery: ['assets/images/prod_drone.jpg'],
       isFeatured: false,
       isTrending: false,
       description: 'Sub-249 gram regulation-free design featuring a 3-axis mechanical gimbal, 4K/60fps HDR video capture, 10km video transmission, and 34-minute flight endurance.'
@@ -350,7 +350,30 @@ function getCatalog() {
   const local = localStorage.getItem('nexora_products');
   if (local) {
     try {
-      return JSON.parse(local);
+      const items = JSON.parse(local);
+      if (Array.isArray(items) && items.length > 0) {
+        let needsUpdate = false;
+        const normalized = items.map(p => {
+          if (p.image && !p.image.startsWith('assets/')) {
+            p.image = 'assets/' + p.image.replace(/^[./]+/, '');
+            needsUpdate = true;
+          }
+          if (Array.isArray(p.gallery)) {
+            p.gallery = p.gallery.map(img => {
+              if (img && !img.startsWith('assets/')) {
+                needsUpdate = true;
+                return 'assets/' + img.replace(/^[./]+/, '');
+              }
+              return img;
+            });
+          }
+          return p;
+        });
+        if (needsUpdate) {
+          localStorage.setItem('nexora_products', JSON.stringify(normalized));
+        }
+        return normalized;
+      }
     } catch(e) {
       console.error(e);
     }
@@ -604,9 +627,9 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
   renderCartDrawer();
 
-  // Backdrop click listener
-  const backdrop = document.getElementById('cartBackdrop');
-  backdrop?.addEventListener('click', closeCartDrawer);
+  // Cart Backdrop click listener
+  const cartBackdrop = document.getElementById('cartBackdrop');
+  cartBackdrop?.addEventListener('click', closeCartDrawer);
 
   // Search form submit handler (if present)
   const navSearchForm = document.getElementById('navSearchForm');
@@ -620,4 +643,118 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = `categories.html?search=${q}&cat=${cat}`;
     });
   }
+
+  // Mobile Drawer Toggle Listeners
+  const mobileToggles = document.querySelectorAll('.mobile-menu-toggle, #mobileToggle');
+  mobileToggles.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMobileMenu();
+    });
+  });
+
+  const mobileBackdrop = document.getElementById('mobileMenuBackdrop');
+  mobileBackdrop?.addEventListener('click', closeMobileMenu);
+
+  const mobileCloseBtns = document.querySelectorAll('.mobile-menu-close-btn, #mobileMenuClose');
+  mobileCloseBtns.forEach(btn => {
+    btn.addEventListener('click', closeMobileMenu);
+  });
+
+  // Global key listener for ESC to close drawers
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileMenu();
+      closeCartDrawer();
+    }
+  });
+
+  // Scroll to Top Button Initialization
+  initScrollToTop();
 });
+
+// ==========================================================================
+// 6. Mobile Menu Drawer System
+// ==========================================================================
+
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  if (!menu) return;
+  const isOpen = menu.classList.contains('open');
+  if (isOpen) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+}
+
+function openMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const backdrop = document.getElementById('mobileMenuBackdrop');
+  if (menu) {
+    menu.classList.add('open');
+    backdrop?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const backdrop = document.getElementById('mobileMenuBackdrop');
+  if (menu) {
+    menu.classList.remove('open');
+    backdrop?.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleMobileSearch(e, formEl) {
+  if (e) e.preventDefault();
+  const form = formEl || document.getElementById('mobileSearchForm');
+  if (!form) return;
+  const input = form.querySelector('input');
+  if (input && input.value.trim()) {
+    closeMobileMenu();
+    window.location.href = `categories.html?search=${encodeURIComponent(input.value.trim())}`;
+  }
+}
+
+// ==========================================================================
+// 5. Scroll To Top Component Logic
+// ==========================================================================
+
+function initScrollToTop() {
+  let scrollBtn = document.getElementById('scrollToTopBtn');
+  if (!scrollBtn) {
+    scrollBtn = document.createElement('button');
+    scrollBtn.id = 'scrollToTopBtn';
+    scrollBtn.className = 'scroll-to-top-btn';
+    scrollBtn.setAttribute('aria-label', 'Scroll to top');
+    scrollBtn.setAttribute('title', 'Scroll to top of page');
+    scrollBtn.innerHTML = `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    `;
+    document.body.appendChild(scrollBtn);
+  }
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 280) {
+      scrollBtn.classList.add('visible');
+    } else {
+      scrollBtn.classList.remove('visible');
+    }
+  };
+
+  window.addEventListener('scroll', toggleVisibility, { passive: true });
+  toggleVisibility();
+
+  scrollBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+}
+

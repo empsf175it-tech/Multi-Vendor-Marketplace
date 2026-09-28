@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Your Account — Nexora Multi-Vendor Marketplace</title>
+  <meta name="description" content="Register as a shopper or open a merchant storefront on Nexora. Join thousands of independent creators, boutique brands, and discerning global buyers.">
+  <meta name="keywords" content="register nexora, merchant sign up, start selling, open store, customer registration, multi-vendor marketplace">
+  
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B35'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+  
+  <style>
+    .reg-wrapper {
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reg-card {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2.75rem 2.5rem;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 35px rgba(255, 107, 53, 0.08);
+      position: relative;
+    }
+
+
+
+
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .role-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem 0.85rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .role-card:hover:not(.active) {
+      border-color: rgba(255, 107, 53, 0.4);
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateY(-2px);
+    }
+
+    .role-card.active {
+      border-color: var(--accent-primary);
+      background: rgba(255, 107, 53, 0.08);
+      box-shadow: 0 0 0 1px var(--accent-primary);
+    }
+
+    .reg-card a:not(.brand-logo):not(.social-auth-btn) {
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .reg-card a:not(.brand-logo):not(.social-auth-btn):hover {
+      color: var(--accent-secondary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .brand-logo {
+      transition: transform var(--transition-fast);
+    }
+
+    .brand-logo:hover {
+      transform: translateY(-2px);
+    }
+
+    .brand-logo:hover .brand-icon {
+      box-shadow: 0 0 25px var(--accent-glow);
+    }
+
+    .role-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+      color: var(--accent-primary);
+    }
+
+    .role-card.active .role-icon {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .role-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .role-sub {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-top: 0.15rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.8rem 1rem;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .toggle-pwd-btn:hover {
+      color: white;
+    }
+
+    /* Vendor Extra Box */
+    .vendor-panel {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px dashed rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .social-auth {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-auth-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.5rem;
+      color: white;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .social-auth-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .divider {
+      position: relative;
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+
+    .divider span {
+      background: var(--bg-card);
+      padding: 0 0.85rem;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    .strength-meter {
+      margin-top: 0.5rem;
+    }
+
+    .strength-bar-bg {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .strength-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #EF4444;
+      transition: all 0.3s ease;
+    }
+
+    .strength-hints {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 0.35rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Main Registration Area -->
+  <main class="reg-wrapper">
+    <div class="reg-card">
+        <div style="margin-bottom: 1.5rem; text-align: center;">
+          <a href="index.html" class="brand-logo" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem; text-decoration: none; margin-bottom: 1.25rem;">
+            <div class="brand-icon" style="width: 44px; height: 44px; background: var(--accent-gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-accent);">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; letter-spacing: 0.08em; color: white;">NEXORA</span>
+          </a>
+          <h2 style="font-size: 1.75rem; font-weight: 800; color: white;">Create Account</h2>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0.25rem;">Select your profile type to get started</p>
+        </div>
+
+        <!-- Role Type Selection -->
+        <div class="role-selector">
+          <div class="role-card active" id="roleShopper" onclick="setRole('shopper')">
+            <div class="role-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <div class="role-title">Buyer / Shopper</div>
+            <div class="role-sub">Track orders & save items</div>
+          </div>
+
+          <div class="role-card" id="roleMerchant" onclick="setRole('merchant')">
+            <div class="role-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="role-title">Merchant Seller</div>
+            <div class="role-sub">Launch your storefront</div>
+          </div>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegistrationSubmit(event)">
+          <!-- Full Name -->
+          <div class="form-group">
+            <label for="fullName">Full Legal Name</label>
+            <input type="text" id="fullName" class="form-input" placeholder="e.g. Henrik Lindqvist" required>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="emailAddr">Work or Personal Email</label>
+            <input type="email" id="emailAddr" class="form-input" placeholder="name@example.com" required>
+          </div>
+
+          <!-- Vendor Extra Fields Panel -->
+          <div class="vendor-panel" id="vendorPanel" style="display: none;">
+            <div style="font-weight: 700; color: white; font-size: 0.9rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span style="color: var(--trust-emerald);">✓</span> Merchant Store Setup Details
+            </div>
+            
+            <div class="form-group">
+              <label for="storeName" style="font-size: 0.8rem;">Storefront Name</label>
+              <input type="text" id="storeName" class="form-input" placeholder="e.g. Nordic Timber Atelier">
+            </div>
+
+            <div class="form-group">
+              <label for="storeCategory" style="font-size: 0.8rem;">Primary Specialty</label>
+              <select id="storeCategory" class="form-input" style="background: var(--bg-surface);">
+                <option value="audio">Studio & Audiophile Sound</option>
+                <option value="home">Home & Living Decor</option>
+                <option value="fashion">Luxury Fashion & Apparel</option>
+                <option value="crafts">Artisanal Pottery & Crafts</option>
+                <option value="electronics">Consumer Electronics</option>
+                <option value="gourmet">Gourmet Pantry & Coffee</option>
+              </select>
+            </div>
+
+            <div style="font-size: 0.75rem; color: var(--trust-emerald);">
+              🛡️ Includes Level 1 Merchant Escrow Payout Access on approval.
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="passwordInput">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="passwordInput" class="form-input" placeholder="Minimum 8 characters" required minlength="8" oninput="evalPassword(this.value)">
+              <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility()" aria-label="Toggle password view">
+                <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+
+            <div class="strength-meter">
+              <div class="strength-bar-bg">
+                <div class="strength-bar-fill" id="pwdStrengthBar"></div>
+              </div>
+              <div class="strength-hints">
+                <span id="pwdStrengthText">Strength: Weak</span>
+                <span>Requires 8+ chars & symbol</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Terms & Newsletter -->
+          <div style="margin-bottom: 1.25rem; font-size: 0.82rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="termsCheck" required style="accent-color: var(--accent-primary); margin-top: 3px;">
+              <span>I agree to Nexora's <a href="#" style="color: var(--accent-primary);">Merchant & Buyer Terms</a> and <a href="#" style="color: var(--accent-primary);">Privacy Policy</a>.</span>
+            </label>
+
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="newsletterCheck" checked style="accent-color: var(--accent-primary);">
+              <span>Receive weekly merchant insights & curated collection drops</span>
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="submitBtn" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 700;">
+            Create Account & Continue →
+          </button>
+        </form>
+
+        <div class="divider">
+          <span>Or sign up with</span>
+        </div>
+
+        <div class="social-auth">
+          <button class="social-auth-btn" onclick="mockSocial('Google')">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.2-2 .4-2.7L1.6 6.4C.6 8.4 0 10.6 0 12s.6 3.6 1.6 5.6l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.4-6.7-5.3L1.6 16C3.5 19.8 7.4 23 12 23z"/></svg>
+            <span>Google</span>
+          </button>
+          <button class="social-auth-btn" onclick="mockSocial('Apple')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.8 1.11-1.92.99-3.04-.96.04-2.12.64-2.8 1.44-.6.69-1.12 1.82-.98 2.92 1.07.08 2.14-.54 2.79-1.32z"/></svg>
+            <span>Apple</span>
+          </button>
+          <button class="social-auth-btn" onclick="mockSocial('GitHub')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            <span>GitHub</span>
+          </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.75rem; font-size: 0.88rem; color: var(--text-muted);">
+          Already have an account? <a href="auth.html" style="color: var(--accent-primary); font-weight: 600;">Sign in here</a>
+        </div>
+      </div>
+  </main>
+
+
+
+
+
+  <script src="assets/js/store.js"></script>
+  <script>
+    let currentRole = 'shopper';
+
+    function setRole(role) {
+      currentRole = role;
+      const shopperCard = document.getElementById('roleShopper');
+      const merchantCard = document.getElementById('roleMerchant');
+      const vendorPanel = document.getElementById('vendorPanel');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (role === 'merchant') {
+        merchantCard.classList.add('active');
+        shopperCard.classList.remove('active');
+        vendorPanel.style.display = 'block';
+        submitBtn.textContent = 'Launch Storefront & Register →';
+      } else {
+        shopperCard.classList.add('active');
+        merchantCard.classList.remove('active');
+        vendorPanel.style.display = 'none';
+        submitBtn.textContent = 'Create Shopper Account →';
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const pwdInput = document.getElementById('passwordInput');
+      const eyeIcon = document.getElementById('eyeIcon');
+
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeIcon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+      } else {
+        pwdInput.type = 'password';
+        eyeIcon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+      }
+    }
+
+    function evalPassword(val) {
+      const bar = document.getElementById('pwdStrengthBar');
+      const text = document.getElementById('pwdStrengthText');
+
+      if (val.length === 0) {
+        bar.style.width = '0%';
+        text.textContent = 'Strength: Weak';
+        return;
+      }
+
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      if (score <= 1) {
+        bar.style.width = '25%';
+        bar.style.backgroundColor = '#EF4444';
+        text.textContent = 'Strength: Weak';
+      } else if (score === 2 || score === 3) {
+        bar.style.width = '65%';
+        bar.style.backgroundColor = '#F59E0B';
+        text.textContent = 'Strength: Moderate';
+      } else {
+        bar.style.width = '100%';
+        bar.style.backgroundColor = '#10B981';
+        text.textContent = 'Strength: Strong (Great!)';
+      }
+    }
+
+    function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('emailAddr').value.trim();
+      const storeName = document.getElementById('storeName').value.trim() || `${name}'s Storefront`;
+
+      const userObject = {
+        name: name,
+        email: email,
+        role: currentRole === 'merchant' ? 'vendor' : 'buyer',
+        storeName: currentRole === 'merchant' ? storeName : null,
+        joinedDate: new Date().toISOString()
+      };
+
+      localStorage.setItem('nexora_user', JSON.stringify(userObject));
+
+      if (currentRole === 'merchant') {
+        showToast('Storefront Registered!', `Welcome aboard, ${name}! Launching your merchant dashboard...`, 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1200);
+      } else {
+        showToast('Welcome to Nexora!', `Account created for ${name}. Happy shopping!`, 'success');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1200);
+      }
+    }
+
+    function mockSocial(provider) {
+      showToast('OAuth Authentication', `Connecting securely with ${provider}...`, 'info');
+      setTimeout(() => {
+        const userObj = {
+          name: `${provider} Creator User`,
+          email: `user@${provider.toLowerCase()}.com`,
+          role: currentRole === 'merchant' ? 'vendor' : 'buyer',
+          storeName: currentRole === 'merchant' ? `${provider} Artisan Store` : null
+        };
+        localStorage.setItem('nexora_user', JSON.stringify(userObj));
+        showToast('Success', `Authenticated with ${provider}. Redirecting...`, 'success');
+        setTimeout(() => {
+          window.location.href = currentRole === 'merchant' ? 'dashboard.html' : 'index.html';
+        }, 800);
+      }, 700);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('role') === 'vendor' || params.get('mode') === 'merchant') {
+        setRole('merchant');
+      }
+    });
+  </script>
+</body>
+</html>

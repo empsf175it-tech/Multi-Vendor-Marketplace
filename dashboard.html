@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vendor Command Center & Merchant Dashboard — Nexora</title>
   <meta name="description" content="Manage products, track customer orders, view monthly earnings, and configure storefront policies in the Nexora Vendor Command Center.">
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="assets/css/main.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B35'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
   <style>
     .dashboard-layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 260px minmax(0, 1fr);
       min-height: calc(100vh - 80px);
+      width: 100%;
     }
     .dash-sidebar {
       background: var(--bg-surface);
@@ -32,7 +33,7 @@
       font-size: 0.95rem;
       cursor: pointer;
       transition: all var(--transition-fast);
-      border: none;
+      border: 1px solid transparent;
       background: transparent;
       width: 100%;
       text-align: left;
@@ -46,23 +47,41 @@
       color: var(--accent-primary);
       border: 1px solid rgba(255, 107, 53, 0.3);
     }
+    .dash-sidebar-exit {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+    }
     .dash-content {
       padding: 2.5rem 3rem;
       overflow-y: auto;
+      overflow-x: hidden;
       background: var(--bg-dark);
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
     }
     .dash-section {
       display: none;
+      width: 100%;
+      min-width: 0;
     }
     .dash-section.active {
       display: block;
       animation: fadeIn 0.3s ease;
     }
     .stats-overview-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 1.5rem;
       margin-bottom: 2.5rem;
+    }
+    .stats-overview-grid > * {
+      flex: 0 1 calc((100% - 3 * 1.5rem) / 4);
+      max-width: calc((100% - 3 * 1.5rem) / 4);
+      width: calc((100% - 3 * 1.5rem) / 4);
+      box-sizing: border-box;
     }
     .stat-card {
       background: var(--bg-card);
@@ -118,8 +137,25 @@
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
       box-shadow: var(--shadow-card);
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+    .table-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .table-container::-webkit-scrollbar-track {
+      background: rgba(16, 22, 38, 0.6);
+      border-radius: 4px;
+    }
+    .table-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 4px;
+    }
+    .table-container::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-primary);
     }
     .data-table {
       width: 100%;
@@ -127,14 +163,15 @@
       text-align: left;
     }
     .data-table th {
-      background: rgba(9, 13, 22, 0.6);
+      background: rgba(9, 13, 22, 0.7);
       padding: 1rem 1.25rem;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-dim);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
     }
     .data-table td {
       padding: 1.1rem 1.25rem;
@@ -142,6 +179,9 @@
       font-size: 0.95rem;
       color: var(--text-main);
       vertical-align: middle;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
     }
     .data-table tr:hover td {
       background: rgba(255, 255, 255, 0.02);
@@ -154,6 +194,7 @@
       font-weight: 700;
       padding: 0.25rem 0.65rem;
       border-radius: var(--radius-full);
+      white-space: nowrap;
     }
     .status-delivered {
       background: rgba(16, 185, 129, 0.15);
@@ -178,6 +219,7 @@
       place-items: center;
       cursor: pointer;
       transition: all var(--transition-fast);
+      flex-shrink: 0;
     }
     .action-icon-btn:hover {
       color: white;
@@ -204,29 +246,377 @@
       place-items: center;
       padding: 1.5rem;
     }
-    @media (max-width: 1024px) {
+
+    /* Top Navbar Actions */
+    .dash-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-shrink: 0;
+    }
+    .dash-storefront-btn {
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border-radius: var(--radius-full);
+    }
+    .storefront-btn-text {
+      display: inline;
+    }
+    .storefront-btn-text-mobile {
+      display: none;
+    }
+    .dash-top-vendor-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+      flex-shrink: 0;
+    }
+    .dash-top-vendor-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .dash-top-vendor-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: white;
+      white-space: nowrap;
+    }
+    .dash-top-vendor-status {
+      color: var(--trust-emerald);
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    /* Dashboard Section Headers & Titles */
+    .dash-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+    .dash-page-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin: 0;
+    }
+    .dash-page-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.35rem;
+      line-height: 1.4;
+    }
+    .dash-header-btn {
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Subheadings within sections (e.g. Recent Orders Requiring Dispatch) */
+    .dash-subheading-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .dash-subheading-title {
+      font-size: 1.35rem;
+      color: white;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.3;
+    }
+    .dash-subheading-action {
+      background: none;
+      border: none;
+      color: var(--accent-primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 0.2rem 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: color var(--transition-fast), transform var(--transition-fast);
+    }
+    .dash-subheading-action:hover {
+      color: var(--accent-secondary);
+      transform: translateX(3px);
+    }
+    @media (max-width: 1024px), (hover: none) and (pointer: coarse) and (max-width: 1366px) {
       .dashboard-layout {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        min-height: auto;
       }
       .dash-sidebar {
+        position: sticky !important;
+        top: 80px !important;
+        z-index: 140 !important;
+        background: rgba(16, 22, 38, 0.96) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         flex-direction: row;
+        align-items: center;
         overflow-x: auto;
         border-right: none;
         border-bottom: 1px solid var(--border-subtle);
+        padding: 0.5rem 1.25rem;
+        gap: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        height: auto;
+        min-height: auto;
+        flex-shrink: 0;
       }
-      .stats-overview-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .dash-sidebar::-webkit-scrollbar {
+        height: 3px;
+      }
+      .dash-sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 3px;
+      }
+      .dash-nav-item {
+        white-space: nowrap;
+        padding: 0.5rem 0.95rem;
+        flex-shrink: 0;
+        width: auto;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        font-size: 0.88rem;
+        align-self: center;
+        box-sizing: border-box;
+      }
+      .dash-nav-item svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+      .dash-sidebar-exit {
+        margin-top: 0 !important;
+        margin-left: auto !important;
+        padding: 0 0 0 0.75rem !important;
+        border-top: none !important;
+        border-left: 1px solid var(--border-subtle) !important;
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+        height: 38px;
+        align-self: center;
+      }
+      .dash-sidebar-exit .dash-nav-item {
+        padding: 0.5rem 0.85rem;
+      }
+      .stats-overview-grid > * {
+        flex: 0 1 calc((100% - 1.5rem) / 2);
+        max-width: calc((100% - 1.5rem) / 2);
+        width: calc((100% - 1.5rem) / 2);
       }
       .dash-content {
-        padding: 1.5rem;
-      }
-    }
-    @media (max-width: 640px) {
-      .stats-overview-grid {
-        grid-template-columns: 1fr;
+        padding: 1.5rem 1.25rem;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: visible !important;
       }
       .table-container {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.85rem 0.95rem;
+      }
+      #sec-overview .data-table {
+        min-width: 720px;
+      }
+      #sec-products .data-table {
+        min-width: 700px;
+      }
+      #sec-orders .data-table {
+        min-width: 800px;
+      }
+      #sec-earnings .data-table {
+        min-width: 620px;
+      }
+    }
+    @media (max-width: 680px) {
+      .dash-sidebar {
+        top: 70px !important;
+        padding: 0.45rem 0.85rem;
+      }
+      .dash-top-actions {
+        gap: 0.55rem !important;
+      }
+      .dash-storefront-btn {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.7rem !important;
+        gap: 0.35rem !important;
+        height: 36px;
+      }
+      .storefront-btn-text {
+        display: none !important;
+      }
+      .storefront-btn-text-mobile {
+        display: inline !important;
+        font-weight: 600;
+      }
+      .dash-top-vendor-chip {
+        padding: 2px !important;
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        justify-content: center !important;
+        position: relative !important;
+        border: 2px solid var(--border-subtle) !important;
+      }
+      .dash-top-vendor-avatar {
+        width: 28px !important;
+        height: 28px !important;
+      }
+      .dash-top-vendor-name,
+      .dash-top-vendor-status {
+        display: none !important;
+      }
+      .dash-top-vendor-chip::after {
+        content: '';
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 9px;
+        height: 9px;
+        background: var(--trust-emerald);
+        border: 2px solid var(--bg-surface);
+        border-radius: 50%;
+      }
+    }
+    @media (max-width: 640px) {
+      .dash-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.85rem;
+        margin-bottom: 1.5rem;
+      }
+      .dash-page-title {
+        font-size: 1.45rem !important;
+        line-height: 1.25 !important;
+        letter-spacing: -0.3px;
+      }
+      .dash-page-subtitle {
+        font-size: 0.85rem !important;
+        line-height: 1.35 !important;
+      }
+      .dash-header-btn {
+        align-self: flex-start;
+        padding: 0.6rem 1.15rem !important;
+        font-size: 0.85rem !important;
+      }
+      .dash-subheading-bar {
+        align-items: baseline;
+        gap: 0.35rem 0.75rem;
+        margin-bottom: 0.85rem;
+      }
+      .dash-subheading-title {
+        font-size: 1.15rem !important;
+        line-height: 1.3;
+      }
+      .dash-subheading-action {
+        font-size: 0.85rem;
+        white-space: nowrap !important;
+      }
+      .stats-overview-grid > * {
+        flex: 0 1 100%;
+        max-width: 100%;
+        width: 100%;
+      }
+      .dash-content {
+        padding: 1.25rem 0.75rem;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem 0.75rem;
+      }
+    }
+
+    /* Settings & Profile Section */
+    .settings-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      max-width: 820px;
+      box-shadow: var(--shadow-card);
+    }
+    .settings-brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.25rem 1.5rem;
+      background: rgba(16, 22, 38, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .settings-brand-info {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .settings-brand-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 166, 43, 0.1));
+      border: 1px solid rgba(255, 107, 53, 0.4);
+      display: grid;
+      place-items: center;
+      color: var(--accent-primary);
+      box-shadow: 0 0 20px var(--accent-glow);
+      flex-shrink: 0;
+    }
+    .settings-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 640px) {
+      .settings-card {
+        padding: 1.5rem 1.25rem;
+      }
+      .settings-form-row {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+      }
+      .settings-brand-header {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -234,25 +624,26 @@
 <body>
 
   <!-- Top Dashboard Navbar -->
-  <header class="navbar" style="position: sticky; top: 0; z-index: 100;">
+  <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="brand-logo">
         <div class="brand-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
-        <span>NEXORA <span style="font-size: 0.75rem; background: var(--accent-gradient); padding: 0.2rem 0.5rem; border-radius: var(--radius-full); margin-left: 0.4rem;">MERCHANT</span></span>
+        <span>NEXORA</span>
       </a>
 
-      <div style="display: flex; align-items: center; gap: 1.25rem;">
-        <a href="vendor-store.html?vendor=apex-audio" target="_blank" class="btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-          <span>View Live Storefront</span>
+      <div class="dash-top-actions">
+        <a href="vendor-store.html?vendor=apex-audio" target="_blank" class="btn-secondary dash-storefront-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <span class="storefront-btn-text">View Live Storefront</span>
+          <span class="storefront-btn-text-mobile">Storefront</span>
         </a>
 
-        <div style="display: flex; align-items: center; gap: 0.75rem; background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 0.35rem 0.75rem; border-radius: var(--radius-full);">
-          <img src="images/vendor_logo_1.jpg" alt="Apex Audio Labs" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
-          <span style="font-size: 0.85rem; font-weight: 700; color: white;">Apex Audio Labs</span>
-          <span style="color: var(--trust-emerald); font-size: 0.75rem;">● Online</span>
+        <div class="dash-top-vendor-chip" title="Apex Audio Labs (Online)">
+          <img src="assets/images/vendor_logo_1.jpg" alt="Apex Audio Labs" class="dash-top-vendor-avatar">
+          <span class="dash-top-vendor-name">Apex Audio Labs</span>
+          <span class="dash-top-vendor-status">● Online</span>
         </div>
       </div>
     </div>
@@ -282,9 +673,9 @@
         <span>Store Settings</span>
       </button>
 
-      <div style="margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle);">
+      <div class="dash-sidebar-exit">
         <a href="index.html" class="dash-nav-item" style="color: #EF4444;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           <span>Exit to Marketplace</span>
         </a>
       </div>
@@ -297,12 +688,12 @@
            1. Overview Section
            ==================================================================== -->
       <div class="dash-section active" id="sec-overview">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <h1 style="font-size: 2.2rem; font-weight: 800; color: white;">Merchant Command Overview</h1>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Real-time performance metrics for Apex Audio Labs</p>
+        <div class="dash-section-header">
+          <div class="dash-section-header-text">
+            <h1 class="dash-page-title">Merchant Command Overview</h1>
+            <p class="dash-page-subtitle">Real-time performance metrics for Apex Audio Labs</p>
           </div>
-          <button class="btn-primary" onclick="openAddProductModal()">
+          <button class="btn-primary dash-header-btn" onclick="openAddProductModal()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             <span>Add New Product</span>
           </button>
@@ -348,47 +739,50 @@
         </div>
 
         <!-- Recent Orders Preview -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h2 style="font-size: 1.35rem; color: white;">Recent Orders Requiring Dispatch</h2>
-          <button onclick="switchDashSection('orders', document.querySelectorAll('.dash-nav-item')[2])" style="background: none; border: none; color: var(--accent-primary); font-size: 0.9rem; cursor: pointer;">View All Orders →</button>
+        <div class="dash-subheading-bar">
+          <h2 class="dash-subheading-title">Recent Orders Requiring Dispatch</h2>
+          <button class="dash-subheading-action" onclick="switchDashSection('orders', document.querySelectorAll('.dash-nav-item')[2])">
+            <span>View All Orders</span>
+            <span style="font-size: 1.1em; line-height: 1;">→</span>
+          </button>
         </div>
 
         <div class="table-container">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Order #</th>
-                <th>Customer</th>
-                <th>Purchased Item</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th style="text-align: left;">Order #</th>
+                <th style="text-align: left;">Customer</th>
+                <th style="text-align: left;">Purchased Item</th>
+                <th style="text-align: right;">Total</th>
+                <th style="text-align: center;">Status</th>
+                <th style="text-align: center;">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="font-weight: 700; color: white;">#NX-8921</td>
-                <td>Henrik Lindqvist (Stockholm, SE)</td>
-                <td>AuraPulse ANC Headphones</td>
-                <td style="color: var(--accent-primary); font-weight: 700;">$249.00</td>
-                <td><span class="status-badge status-pending">Processing</span></td>
-                <td><button class="btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" onclick="showToast('Dispatch Confirmed', 'Carrier pickup requested via DHL Express.', 'success')">Dispatch</button></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#NX-8921</td>
+                <td style="white-space: nowrap;">Henrik Lindqvist (Stockholm, SE)</td>
+                <td style="min-width: 170px;">AuraPulse ANC Headphones</td>
+                <td style="color: var(--accent-primary); font-weight: 700; text-align: right; white-space: nowrap;">$249.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-pending">Processing</span></td>
+                <td style="text-align: center; white-space: nowrap;"><button class="btn-primary" style="padding: 0.35rem 0.95rem; font-size: 0.8rem;" onclick="showToast('Dispatch Confirmed', 'Carrier pickup requested via DHL Express.', 'success')">Dispatch</button></td>
               </tr>
               <tr>
-                <td style="font-weight: 700; color: white;">#NX-8918</td>
-                <td>Claire Dupont (Paris, FR)</td>
-                <td>Chronos Sapphire Titanium Watch</td>
-                <td style="color: var(--accent-primary); font-weight: 700;">$380.00</td>
-                <td><span class="status-badge status-shipped">Shipped</span></td>
-                <td><span style="font-size: 0.8rem; color: var(--text-dim);">DHL-99214</span></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#NX-8918</td>
+                <td style="white-space: nowrap;">Claire Dupont (Paris, FR)</td>
+                <td style="min-width: 170px;">Chronos Sapphire Titanium Watch</td>
+                <td style="color: var(--accent-primary); font-weight: 700; text-align: right; white-space: nowrap;">$380.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-shipped">Shipped</span></td>
+                <td style="text-align: center; white-space: nowrap;"><span style="font-size: 0.82rem; color: var(--text-dim); font-family: monospace;">DHL-99214</span></td>
               </tr>
               <tr>
-                <td style="font-weight: 700; color: white;">#NX-8904</td>
-                <td>Marcus Thorne (London, UK)</td>
-                <td>Heritage Classic 35mm Rangefinder</td>
-                <td style="color: var(--accent-primary); font-weight: 700;">$890.00</td>
-                <td><span class="status-badge status-delivered">Delivered</span></td>
-                <td><span style="font-size: 0.8rem; color: var(--trust-emerald);">Payout Released</span></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#NX-8904</td>
+                <td style="white-space: nowrap;">Marcus Thorne (London, UK)</td>
+                <td style="min-width: 170px;">Heritage Classic 35mm Rangefinder</td>
+                <td style="color: var(--accent-primary); font-weight: 700; text-align: right; white-space: nowrap;">$890.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-delivered">Delivered</span></td>
+                <td style="text-align: center; white-space: nowrap;"><span style="font-size: 0.82rem; color: var(--trust-emerald); font-weight: 600;">Payout Released</span></td>
               </tr>
             </tbody>
           </table>
@@ -399,12 +793,12 @@
            2. Products Catalog Section (Add/Edit/Delete actions)
            ==================================================================== -->
       <div class="dash-section" id="sec-products">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <h2 style="font-size: 2rem; font-weight: 800; color: white;">Product Inventory Management</h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Manage pricing, stock levels, and publish new designs to Nexora</p>
+        <div class="dash-section-header">
+          <div class="dash-section-header-text">
+            <h2 class="dash-page-title">Product Inventory Management</h2>
+            <p class="dash-page-subtitle">Manage pricing, stock levels, and publish new designs to Nexora</p>
           </div>
-          <button class="btn-primary" onclick="openAddProductModal()">
+          <button class="btn-primary dash-header-btn" onclick="openAddProductModal()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             <span>List New Product</span>
           </button>
@@ -414,12 +808,12 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Rating</th>
-                <th>Actions</th>
+                <th style="text-align: left;">Product</th>
+                <th style="text-align: left;">Category</th>
+                <th style="text-align: right;">Price</th>
+                <th style="text-align: center;">Stock</th>
+                <th style="text-align: center;">Rating</th>
+                <th style="text-align: center;">Actions</th>
               </tr>
             </thead>
             <tbody id="dashProductsTableBody">
@@ -433,12 +827,12 @@
            3. Orders Section
            ==================================================================== -->
       <div class="dash-section" id="sec-orders">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <h2 style="font-size: 2rem; font-weight: 800; color: white;">Store Orders & Fulfillment</h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Monitor customer order statuses and confirm fulfillment</p>
+        <div class="dash-section-header">
+          <div class="dash-section-header-text">
+            <h2 class="dash-page-title">Store Orders & Fulfillment</h2>
+            <p class="dash-page-subtitle">Monitor customer order statuses and confirm fulfillment</p>
           </div>
-          <div style="display: flex; gap: 0.5rem;">
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
             <button class="cat-pill active" onclick="filterOrderRows('all', this)">All</button>
             <button class="cat-pill" onclick="filterOrderRows('pending', this)">Pending</button>
             <button class="cat-pill" onclick="filterOrderRows('shipped', this)">Shipped</button>
@@ -450,60 +844,60 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Date</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th style="text-align: left;">Order ID</th>
+                <th style="text-align: left;">Customer</th>
+                <th style="text-align: left;">Date</th>
+                <th style="text-align: left;">Items</th>
+                <th style="text-align: right;">Total</th>
+                <th style="text-align: center;">Status</th>
+                <th style="text-align: center;">Action</th>
               </tr>
             </thead>
             <tbody id="ordersTableBody">
               <tr data-status="pending">
-                <td style="font-weight: 700; color: white;">#NX-8921</td>
-                <td>Henrik Lindqvist<br><span style="font-size: 0.75rem; color: var(--text-dim);">Stockholm, Sweden</span></td>
-                <td>Today, 10:24 AM</td>
-                <td>AuraPulse ANC Studio Headphones (x1)</td>
-                <td style="color: var(--accent-primary); font-weight: 700;">$249.00</td>
-                <td><span class="status-badge status-pending">Pending Dispatch</span></td>
-                <td><button class="btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" onclick="markOrderShipped(this)">Mark Shipped</button></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#NX-8921</td>
+                <td style="white-space: nowrap;">Henrik Lindqvist<br><span style="font-size: 0.75rem; color: var(--text-dim);">Stockholm, Sweden</span></td>
+                <td style="white-space: nowrap;">Today, 10:24 AM</td>
+                <td style="min-width: 180px;">AuraPulse ANC Studio Headphones (x1)</td>
+                <td style="color: var(--accent-primary); font-weight: 700; text-align: right; white-space: nowrap;">$249.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-pending">Pending Dispatch</span></td>
+                <td style="text-align: center; white-space: nowrap;"><button class="btn-primary" style="padding: 0.35rem 0.95rem; font-size: 0.8rem;" onclick="markOrderShipped(this)">Mark Shipped</button></td>
               </tr>
               <tr data-status="pending">
-                <td style="font-weight: 700; color: white;">#NX-8919</td>
-                <td>Johan Berg (Gothenburg, SE)</td>
-                <td>KeyCraft Mechanical Keyboard (x1)</td>
-                <td>Yesterday</td>
-                <td style="color: var(--accent-primary); font-weight: 700;">$210.00</td>
-                <td><span class="status-badge status-pending">Pending Dispatch</span></td>
-                <td><button class="btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" onclick="markOrderShipped(this)">Mark Shipped</button></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#NX-8919</td>
+                <td style="white-space: nowrap;">Johan Berg (Gothenburg, SE)</td>
+                <td style="white-space: nowrap;">Yesterday</td>
+                <td style="min-width: 180px;">KeyCraft Mechanical Keyboard (x1)</td>
+                <td style="color: var(--accent-primary); font-weight: 700; text-align: right; white-space: nowrap;">$210.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-pending">Pending Dispatch</span></td>
+                <td style="text-align: center; white-space: nowrap;"><button class="btn-primary" style="padding: 0.35rem 0.95rem; font-size: 0.8rem;" onclick="markOrderShipped(this)">Mark Shipped</button></td>
               </tr>
               <tr data-status="shipped">
-                <td style="font-weight: 700; color: white;">#NX-8918</td>
-                <td>Claire Dupont (Paris, France)</td>
-                <td>Chronos Sapphire Titanium Watch (x1)</td>
-                <td>Sept 12, 2026</td>
-                <td style="color: var(--accent-primary); font-weight: 700;">$380.00</td>
-                <td><span class="status-badge status-shipped">In Transit</span></td>
-                <td><span style="font-size: 0.8rem; color: var(--trust-cyan);">Tracking: #DHL-99214</span></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#NX-8918</td>
+                <td style="white-space: nowrap;">Claire Dupont (Paris, France)</td>
+                <td style="white-space: nowrap;">Sept 12, 2026</td>
+                <td style="min-width: 180px;">Chronos Sapphire Titanium Watch (x1)</td>
+                <td style="color: var(--accent-primary); font-weight: 700; text-align: right; white-space: nowrap;">$380.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-shipped">In Transit</span></td>
+                <td style="text-align: center; white-space: nowrap;"><span style="font-size: 0.82rem; color: var(--trust-cyan); font-family: monospace;">DHL-99214</span></td>
               </tr>
               <tr data-status="delivered">
-                <td style="font-weight: 700; color: white;">#NX-8904</td>
-                <td>Marcus Thorne (London, UK)</td>
-                <td>Heritage Classic 35mm Camera (x1)</td>
-                <td>Sept 10, 2026</td>
-                <td style="color: var(--accent-primary); font-weight: 700;">$890.00</td>
-                <td><span class="status-badge status-delivered">Delivered</span></td>
-                <td><span style="font-size: 0.8rem; color: var(--trust-emerald);">Payout Settled</span></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#NX-8904</td>
+                <td style="white-space: nowrap;">Marcus Thorne (London, UK)</td>
+                <td style="white-space: nowrap;">Sept 10, 2026</td>
+                <td style="min-width: 180px;">Heritage Classic 35mm Camera (x1)</td>
+                <td style="color: var(--accent-primary); font-weight: 700; text-align: right; white-space: nowrap;">$890.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-delivered">Delivered</span></td>
+                <td style="text-align: center; white-space: nowrap;"><span style="font-size: 0.82rem; color: var(--trust-emerald); font-weight: 600;">Payout Settled</span></td>
               </tr>
               <tr data-status="delivered">
-                <td style="font-weight: 700; color: white;">#NX-8890</td>
-                <td>Astrid Lind (Oslo, Norway)</td>
-                <td>AeroView 4K Aerial Drone (x1)</td>
-                <td>Sept 08, 2026</td>
-                <td style="color: var(--accent-primary); font-weight: 700;">$499.00</td>
-                <td><span class="status-badge status-delivered">Delivered</span></td>
-                <td><span style="font-size: 0.8rem; color: var(--trust-emerald);">Payout Settled</span></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#NX-8890</td>
+                <td style="white-space: nowrap;">Astrid Lind (Oslo, Norway)</td>
+                <td style="white-space: nowrap;">Sept 08, 2026</td>
+                <td style="min-width: 180px;">AeroView 4K Aerial Drone (x1)</td>
+                <td style="color: var(--accent-primary); font-weight: 700; text-align: right; white-space: nowrap;">$499.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-delivered">Delivered</span></td>
+                <td style="text-align: center; white-space: nowrap;"><span style="font-size: 0.82rem; color: var(--trust-emerald); font-weight: 600;">Payout Settled</span></td>
               </tr>
             </tbody>
           </table>
@@ -514,12 +908,12 @@
            4. Earnings Section
            ==================================================================== -->
       <div class="dash-section" id="sec-earnings">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <h2 style="font-size: 2rem; font-weight: 800; color: white;">Merchant Revenue & Escrow Payouts</h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Track escrow clearances, net payouts, and automated transfers</p>
+        <div class="dash-section-header">
+          <div class="dash-section-header-text">
+            <h2 class="dash-page-title">Merchant Revenue & Escrow Payouts</h2>
+            <p class="dash-page-subtitle">Track escrow clearances, net payouts, and automated transfers</p>
           </div>
-          <button class="btn-emerald" onclick="openWithdrawModal()">
+          <button class="btn-emerald dash-header-btn" onclick="openWithdrawModal()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
             <span>Withdraw Cleared Funds ($12,450.00)</span>
           </button>
@@ -595,34 +989,34 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>Transaction Reference</th>
-                <th>Destination Account</th>
-                <th>Date Settled</th>
-                <th>Amount</th>
-                <th>Status</th>
+                <th style="text-align: left;">Transaction Reference</th>
+                <th style="text-align: left;">Destination Account</th>
+                <th style="text-align: left;">Date Settled</th>
+                <th style="text-align: right;">Amount</th>
+                <th style="text-align: center;">Status</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="font-weight: 700; color: white;">#TRX-99418</td>
-                <td>SEB Bank (Stockholm) •••• 4192</td>
-                <td>Sept 01, 2026</td>
-                <td style="color: var(--trust-emerald); font-weight: 700;">$14,820.00</td>
-                <td><span class="status-badge status-delivered">Transferred</span></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#TRX-99418</td>
+                <td style="min-width: 180px;">SEB Bank (Stockholm) •••• 4192</td>
+                <td style="white-space: nowrap;">Sept 01, 2026</td>
+                <td style="color: var(--trust-emerald); font-weight: 700; text-align: right; white-space: nowrap;">$14,820.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-delivered">Transferred</span></td>
               </tr>
               <tr>
-                <td style="font-weight: 700; color: white;">#TRX-98830</td>
-                <td>SEB Bank (Stockholm) •••• 4192</td>
-                <td>Aug 15, 2026</td>
-                <td style="color: var(--trust-emerald); font-weight: 700;">$12,650.00</td>
-                <td><span class="status-badge status-delivered">Transferred</span></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#TRX-98830</td>
+                <td style="min-width: 180px;">SEB Bank (Stockholm) •••• 4192</td>
+                <td style="white-space: nowrap;">Aug 15, 2026</td>
+                <td style="color: var(--trust-emerald); font-weight: 700; text-align: right; white-space: nowrap;">$12,650.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-delivered">Transferred</span></td>
               </tr>
               <tr>
-                <td style="font-weight: 700; color: white;">#TRX-97641</td>
-                <td>SEB Bank (Stockholm) •••• 4192</td>
-                <td>Aug 01, 2026</td>
-                <td style="color: var(--trust-emerald); font-weight: 700;">$11,400.00</td>
-                <td><span class="status-badge status-delivered">Transferred</span></td>
+                <td style="font-weight: 700; color: white; white-space: nowrap;">#TRX-97641</td>
+                <td style="min-width: 180px;">SEB Bank (Stockholm) •••• 4192</td>
+                <td style="white-space: nowrap;">Aug 01, 2026</td>
+                <td style="color: var(--trust-emerald); font-weight: 700; text-align: right; white-space: nowrap;">$11,400.00</td>
+                <td style="text-align: center; white-space: nowrap;"><span class="status-badge status-delivered">Transferred</span></td>
               </tr>
             </tbody>
           </table>
@@ -633,53 +1027,93 @@
            5. Store Settings Section
            ==================================================================== -->
       <div class="dash-section" id="sec-settings">
-        <div style="margin-bottom: 2rem;">
-          <h2 style="font-size: 2rem; font-weight: 800; color: white;">Store Profile & Policies</h2>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Configure your public merchant storefront information</p>
+        <div class="dash-section-header" style="margin-bottom: 2rem;">
+          <div class="dash-section-header-text">
+            <h2 class="dash-page-title">Store Profile & Policies</h2>
+            <p class="dash-page-subtitle">Configure your public merchant storefront information and fulfillment policies</p>
+          </div>
         </div>
 
-        <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2.5rem; max-width: 780px;">
+        <div class="settings-card">
+          <!-- Storefront Quick Status Banner -->
+          <div class="settings-brand-header">
+            <div class="settings-brand-info">
+              <div class="settings-brand-avatar">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+              </div>
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                  <span style="font-size: 1.15rem; font-weight: 700; color: white;">Apex Audio Labs</span>
+                  <span style="background: rgba(16, 185, 129, 0.15); color: var(--trust-emerald); border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 0.3rem;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Verified Master Artisan
+                  </span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                  Merchant ID: <span style="color: var(--text-dim); font-family: monospace;">#VN-8842</span> • Stockholm, Sweden
+                </div>
+              </div>
+            </div>
+            <a href="vendor-store.html?vendor=apex-audio" target="_blank" class="btn-secondary" style="font-size: 0.85rem; padding: 0.55rem 1rem;">
+              <span>Visit Live Storefront</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+
           <form onsubmit="handleSettingsSave(event)">
             <div class="auth-form-group">
-              <label>Store Brand Name</label>
-              <input type="text" class="auth-input" value="Apex Audio Labs" required id="settingStoreName">
+              <label for="settingStoreName">Store Brand Name</label>
+              <div class="form-hint">The primary brand name displayed across the marketplace and search results.</div>
+              <input type="text" class="auth-input" value="Apex Audio Labs" required id="settingStoreName" placeholder="e.g. Apex Audio Labs">
             </div>
 
             <div class="auth-form-group">
-              <label>Tagline / Specialty</label>
-              <input type="text" class="auth-input" value="Acoustic perfection engineered with aerospace-grade acoustics." required id="settingTagline">
+              <label for="settingTagline">Tagline / Specialty</label>
+              <div class="form-hint">A concise summary of your craftsmanship or sonic engineering focus.</div>
+              <input type="text" class="auth-input" value="Acoustic perfection engineered with aerospace-grade acoustics." required id="settingTagline" placeholder="e.g. Acoustic perfection engineered...">
             </div>
 
             <div class="auth-form-group">
-              <label>Store Bio / Atelier Story</label>
-              <textarea class="auth-input" rows="4" style="resize: vertical;" id="settingBio">Founded in Stockholm, Apex Audio Labs designs audiophile-grade monitoring headphones, studio monitors, and precision acoustic gear for discerning listeners and studio professionals worldwide.</textarea>
+              <label for="settingBio">Store Bio / Atelier Story</label>
+              <div class="form-hint">Tell customers about your heritage, precision manufacturing, and standards.</div>
+              <textarea class="auth-input" rows="4" id="settingBio" placeholder="Describe your atelier story...">Founded in Stockholm, Apex Audio Labs designs audiophile-grade monitoring headphones, studio monitors, and precision acoustic gear for discerning listeners and studio professionals worldwide.</textarea>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+            <div class="settings-form-row">
               <div class="auth-form-group">
-                <label>Studio Location</label>
-                <input type="text" class="auth-input" value="Stockholm, Sweden" required id="settingLocation">
+                <label for="settingLocation">Studio Location</label>
+                <div class="form-hint">Primary origin of dispatch.</div>
+                <input type="text" class="auth-input" value="Stockholm, Sweden" required id="settingLocation" placeholder="City, Country">
               </div>
               <div class="auth-form-group">
-                <label>Dispatch Lead Time</label>
-                <input type="text" class="auth-input" value="1-3 Business Days" required id="settingDispatch">
+                <label for="settingDispatch">Dispatch Lead Time</label>
+                <div class="form-hint">Standard fulfillment handling period.</div>
+                <input type="text" class="auth-input" value="1-3 Business Days" required id="settingDispatch" placeholder="e.g. 1-3 Business Days">
               </div>
             </div>
 
             <div class="auth-form-group">
-              <label>Merchant Support Email</label>
-              <input type="email" class="auth-input" value="support@apexaudio.se" required id="settingEmail">
+              <label for="settingEmail">Merchant Support Email</label>
+              <div class="form-hint">Direct channel for customer order inquiries, warranties, and inquiries.</div>
+              <input type="email" class="auth-input" value="support@apexaudio.se" required id="settingEmail" placeholder="support@domain.com">
             </div>
 
-            <button type="submit" class="btn-primary" style="padding: 0.85rem 2rem; margin-top: 1rem;">
-              Save Profile Changes
-            </button>
+            <div style="display: flex; align-items: center; justify-content: flex-start; gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap;">
+              <button type="submit" class="btn-primary" style="padding: 0.85rem 2.2rem; display: inline-flex; align-items: center; gap: 0.6rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                <span>Save Profile Changes</span>
+              </button>
+              <button type="button" class="btn-secondary" onclick="showToast('Settings Reset', 'Form values reloaded from current profile.', 'info')">
+                Reset
+              </button>
+            </div>
           </form>
         </div>
       </div>
 
     </main>
   </div>
+
 
   <!-- Add Product Modal -->
   <div class="modal-overlay" id="addProductModal">
@@ -724,11 +1158,11 @@
         <div class="auth-form-group">
           <label>Sample Image Asset</label>
           <select id="newProdImage" class="auth-input" style="background: var(--bg-surface);">
-            <option value="images/prod_headphones.jpg">Matte Studio Headphones</option>
-            <option value="images/prod_watch.jpg">Titanium Minimalist Watch</option>
-            <option value="images/prod_keyboard.jpg">Custom Mechanical Keyboard</option>
-            <option value="images/prod_camera.jpg">Vintage Rangefinder Camera</option>
-            <option value="images/prod_drone.jpg">Compact 4K Aerial Drone</option>
+            <option value="assets/images/prod_headphones.jpg">Matte Studio Headphones</option>
+            <option value="assets/images/prod_watch.jpg">Titanium Minimalist Watch</option>
+            <option value="assets/images/prod_keyboard.jpg">Custom Mechanical Keyboard</option>
+            <option value="assets/images/prod_camera.jpg">Vintage Rangefinder Camera</option>
+            <option value="assets/images/prod_drone.jpg">Compact 4K Aerial Drone</option>
           </select>
         </div>
 
@@ -760,8 +1194,8 @@
     </div>
   </div>
 
-  <script src="js/tilt.js"></script>
-  <script src="js/store.js"></script>
+  <script src="assets/js/tilt.js"></script>
+  <script src="assets/js/store.js"></script>
   <script>
     function switchDashSection(secId, btn) {
       document.querySelectorAll('.dash-nav-item').forEach(b => b.classList.remove('active'));
@@ -781,20 +1215,20 @@
       tbody.innerHTML = products.map((p, idx) => `
         <tr>
           <td>
-            <div style="display: flex; align-items: center; gap: 0.85rem;">
-              <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover;">
+            <div style="display: flex; align-items: center; gap: 0.85rem; min-width: 220px;">
+              <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0;">
               <div>
-                <a href="product-details.html?id=${p.id}" target="_blank" style="font-weight: 700; color: white;">${p.name}</a>
-                <div style="font-size: 0.75rem; color: var(--text-dim);">${p.id}</div>
+                <a href="product-details.html?id=${p.id}" target="_blank" style="font-weight: 700; color: white; line-height: 1.35; display: inline-block;">${p.name}</a>
+                <div style="font-size: 0.75rem; color: var(--text-dim); font-family: monospace;">${p.id}</div>
               </div>
             </div>
           </td>
-          <td><span style="font-size: 0.85rem; color: var(--trust-cyan);">${p.categoryName || p.category}</span></td>
-          <td style="font-weight: 700; color: var(--accent-primary);">$${p.price.toFixed(2)}</td>
-          <td><span style="color: var(--trust-emerald); font-weight: 600;">${p.stock} units</span></td>
-          <td><span style="color: #FBBF24;">★ ${p.rating}</span></td>
-          <td>
-            <div style="display: flex; gap: 0.4rem;">
+          <td style="white-space: nowrap;"><span style="font-size: 0.85rem; color: var(--trust-cyan);">${p.categoryName || p.category}</span></td>
+          <td style="font-weight: 700; color: var(--accent-primary); text-align: right; white-space: nowrap;">$${p.price.toFixed(2)}</td>
+          <td style="text-align: center; white-space: nowrap;"><span style="color: var(--trust-emerald); font-weight: 600;">${p.stock} units</span></td>
+          <td style="text-align: center; white-space: nowrap;"><span style="color: #FBBF24;">★ ${p.rating}</span></td>
+          <td style="text-align: center; white-space: nowrap;">
+            <div style="display: inline-flex; gap: 0.4rem; justify-content: center;">
               <button class="action-icon-btn" title="View details" onclick="window.location.href='product-details.html?id=${p.id}'">👁</button>
               <button class="action-icon-btn delete" title="Delete product" onclick="deleteProduct('${p.id}')">🗑</button>
             </div>
