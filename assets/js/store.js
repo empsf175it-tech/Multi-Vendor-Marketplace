@@ -62,7 +62,7 @@ const MARKETPLACE_DATA = {
     {
       id: 'velvet-thread',
       slug: 'velvet-thread',
-      name: 'Velvet & Thread Atelier',
+      name: 'Velvet & Thread',
       badge: 'Artisan Tailor',
       verified: true,
       rating: 4.9,
@@ -70,7 +70,7 @@ const MARKETPLACE_DATA = {
       productsCount: 64,
       followersCount: '22.5k',
       category: 'Luxury Fashion & Apparel',
-      tagline: 'Modern luxury silhouettes hand-tailored from organic fabrics.',
+      tagline: 'Luxury hand-tailored organic apparel.',
       bio: 'An independent atelier dedicated to slow fashion, ethical silk and wool tailoring, and contemporary everyday wear designed to outlast passing trends.',
       banner: 'assets/images/vendor_banner_3.jpg',
       logo: 'assets/images/vendor_logo_3.jpg',

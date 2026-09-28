@@ -196,6 +196,21 @@
       from { opacity: 0; transform: translateY(-8px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @media (max-width: 576px) {
+      .auth-card {
+        padding: 1.75rem 1.15rem !important;
+      }
+      .remember-forgot-row {
+        font-size: 0.78rem !important;
+        gap: 0.5rem !important;
+        align-items: center !important;
+      }
+      .remember-forgot-row label,
+      .remember-forgot-row a {
+        font-size: 0.78rem !important;
+        white-space: nowrap !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -233,12 +248,12 @@
           <input type="password" id="loginPassword" class="auth-input" placeholder="••••••••" required value="NexoraMaster2026!">
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; font-size: 0.85rem;">
-          <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted);">
-            <input type="checkbox" id="rememberMe" checked style="accent-color: var(--accent-primary); cursor: pointer;">
-            <label for="rememberMe" style="cursor: pointer; margin-bottom: 0;">Remember this session</label>
+        <div class="remember-forgot-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; font-size: 0.85rem; flex-wrap: nowrap; width: 100%;">
+          <div style="display: flex; align-items: center; gap: 0.4rem; color: var(--text-muted); white-space: nowrap; flex-shrink: 0;">
+            <input type="checkbox" id="rememberMe" checked style="accent-color: var(--accent-primary); cursor: pointer; flex-shrink: 0; width: 15px; height: 15px; margin: 0; vertical-align: middle;">
+            <label for="rememberMe" style="cursor: pointer; margin-bottom: 0; white-space: nowrap; line-height: 1; display: inline-flex; align-items: center;">Remember this session</label>
           </div>
-          <a href="#" onclick="showToast('Password Reset', 'Password recovery link dispatched to your email.', 'info')" style="font-size: 0.85rem; color: var(--accent-primary); font-weight: 500;">Forgot password?</a>
+          <a href="#" onclick="showToast('Password Reset', 'Password recovery link dispatched to your email.', 'info')" style="font-size: 0.85rem; color: var(--accent-primary); font-weight: 500; white-space: nowrap; flex-shrink: 0; line-height: 1; display: inline-flex; align-items: center;">Forgot password?</a>
         </div>
 
         <button type="submit" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem;">
